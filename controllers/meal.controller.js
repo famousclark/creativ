@@ -1,4 +1,4 @@
-const Meal = require('../models/meal.model') ;
+const Meal = require('../models/meal.model');
 
 
 module.exports.saveMeal = (req,res,next) => {

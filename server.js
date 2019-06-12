@@ -3,18 +3,20 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
-const users = require("./routes/api/users");
 const restaurants = require("./routes/api/restaurants");
 const meals = require("./routes/api/meals");
 const reviews = require("./routes/api/reviews");
+
+const buckets = require("./routes/api/buckets");
+const users = require("./routes/api/users");
 
 const cors = require('cors');
 
 const app = express();
 const server = require('http').createServer(app);
-const socket = require('socket.io');
-const io = socket(server);
-
+//const socket = require('socket.io');
+//const io = socket(server);
+/*
 io.on('connection', (socket) => {
   console.log('Client connected on port 5000(socket.io)');
 
@@ -22,7 +24,7 @@ io.on('connection', (socket) => {
     io.emit('RECEIVE_MESSAGE', data);
   })
 });
-
+*/
 app.use(cors());
 // Bodyparser middleware
 app.use(bodyParser.urlencoded({extended: false}));
@@ -44,11 +46,14 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 // Routes
 app.use("/api/users", users);
+app.use("/api/buckets", buckets);
+
+/*
 app.use("/api/restaurants", restaurants);
 app.use("/api/meals", meals);
 app.use("/api/reviews", reviews);
-
-const seed = require("./seed/seeder");
+*/
+//const seed = require("./seed/seeder");
 
 const port = process.env.PORT || 5000; // process.env.port is Heroku's port when we're ready to deploy
 server.listen(port, () => console.log(`Server up and running on port ${port} !`));
