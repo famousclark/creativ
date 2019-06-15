@@ -7,13 +7,6 @@ module.exports.saveUser = (req,res,next) => {
     user.name = req.body.name;
     user.email = req.body.email;
     user.password = req.body.password;
-    user.meals = [];
-    user.d_plan = req.body.d_plan;
-    spend_goal=[];
-    user.nutri_goal= [];
-    user.diet= req.body.diet;
-    user.profile_pic= "some url";
-
 
     user.save((err, user) => {
         if(!err) {
@@ -55,35 +48,30 @@ module.exports.getUserByEmail = (req, res, next) => {
 module.exports.editUser = (req,res,next) => {
   console.log(req.body);
 
-    User.findOneAndUpdate(
-        { email: req.body.email },
-        { $set: {
-
-                  macros : req.body.macros,
-                  // email : req.body.email,
-                  // password : req.body.password,
-                  // meals : req.body.meals,
-                 d_plan : req.body.d_plan
-                  // spend_goal : req.body.spend_goal,
-                  // nutri_goal : req.body.nutri_goal,
-                  // diet : req.body.diet,
-                  // profile_pic : req.body.profile_pic
-
-               }
-        }, function (err, user) {
-
-
-            if (!err) {
-                res.status(200).json(user);
+  User.findOneAndUpdate(
+      { email: req.body.email },
+      { $set: {
+          // macros : req.body.macros,
+          // email : req.body.email,
+          // password : req.body.password,
+          // meals : req.body.meals,
+          // d_plan : req.body.d_plan
+          // spend_goal : req.body.spend_goal,
+          // nutri_goal : req.body.nutri_goal,
+          // diet : req.body.diet,
+          // profile_pic : req.body.profile_pic
+       }
+      },
+      function (err, user) {
+        if (!err) {
+            res.status(200).json(user);
         }
-            else {
-              res.status(500).json(err);
+        else {
+          res.status(500).json(err);
 
-            }
-          }
-
-        );
-
+        }
+      }
+  );
 }
 
 module.exports.deleteUser  = (req,res,next) => {
@@ -99,7 +87,7 @@ module.exports.deleteUser  = (req,res,next) => {
 
 
 }
-
+/*
 module.exports.addMeal = (req,res,next) => {
     User.findOneAndUpdate(
         { email: req.body.email },
@@ -240,3 +228,4 @@ module.exports.getNutriGoals = (req, res, next) => {
         }
     );
 }
+*/

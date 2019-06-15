@@ -23,17 +23,18 @@ router.get('/get/:email', ctrlUser.getUserByEmail); /* Returns an user matching 
 router.post('/edit', ctrlUser.editUser); /* Edits an user matching the given email. JSON body payload format :: {"email":"someString", "name":"someString", "password":"someString", "meals":[Array of objects(see model)], "d_plan":"some enum (see model)", "spend_goal":[Array of objects(see model)], "nutri_goal":[Array of objects(see model)], "diet":[Array of enums (see model)], "profile_pic":"someString" }*/
 router.post('/delete', ctrlUser.deleteUser);/* Deletes a user matching the given email. JSON body payload format :: {"email":"someEmail"}*/
 
-router.post('/add/meal', ctrlUser.addMeal);   /* Adds a meal to an user matching the given email. JSON body payload format :: {"email":"someEmail, "meal":{meal_id:"someString", "date":"a date"}}*/
-router.post('/delete/meal/:meal_id', ctrlUser.deleteMeal); /* Deletes a meal from an user matching the given email. JSON body payload format :: {"email":"someEmail, "meal_id":"someString"}*/
-router.get('/get/meal/all', ctrlUser.getMeals); /* Returns all meals of a user matching the given email. JSON body payload format :: {"email":"someEmail"}*/
 
-router.post('/edit/dplan', ctrlUser.editDiningPlan); /* Edits the dining plan of a user matching the given email. JSON body payload format :: {"email":"someEmail", "d_plan":"some enum (see model)"}*/
+//router.post('/add/meal', ctrlUser.addMeal);   /* Adds a meal to an user matching the given email. JSON body payload format :: {"email":"someEmail, "meal":{meal_id:"someString", "date":"a date"}}*/
+//router.post('/delete/meal/:meal_id', ctrlUser.deleteMeal); /* Deletes a meal from an user matching the given email. JSON body payload format :: {"email":"someEmail, "meal_id":"someString"}*/
+//router.get('/get/meal/all', ctrlUser.getMeals); /* Returns all meals of a user matching the given email. JSON body payload format :: {"email":"someEmail"}*/
 
-router.post('/add/spendgoal', ctrlUser.addSpendGoal);  /* Adds a spending goal to an user matching the given email. JSON body payload format :: {"email":"someEmail, "spend_goal":{"amount":"someString", "effective":"a date", "expires":"a date"}}*/
-router.get('/get/spendgoal/all/:email', ctrlUser.getSpendGoals); /* Returns all spending goals of a user matching the given email. JSON body payload format :: {"email":"someEmail"}*/
+//router.post('/edit/dplan', ctrlUser.editDiningPlan); /* Edits the dining plan of a user matching the given email. JSON body payload format :: {"email":"someEmail", "d_plan":"some enum (see model)"}*/
 
-router.post('/add/nutrigoal', ctrlUser.addNutriGoal);  /* Adds a nutrition goal to an user matching the given email. JSON body payload format :: {"email":"someEmail, "nutri_goal":{"calories":"someString", "carbs":"someString", "fiber":"someString", "effective":"a date", "expires":"a date"}}*/
-router.get('/get/nutrigoal/all/:email', ctrlUser.getNutriGoals);  /* Returns all nutrition goals of a user matching the given email. JSON body payload format :: {"email":"someEmail"}*/
+//router.post('/add/spendgoal', ctrlUser.addSpendGoal);  /* Adds a spending goal to an user matching the given email. JSON body payload format :: {"email":"someEmail, "spend_goal":{"amount":"someString", "effective":"a date", "expires":"a date"}}*/
+//router.get('/get/spendgoal/all/:email', ctrlUser.getSpendGoals); /* Returns all spending goals of a user matching the given email. JSON body payload format :: {"email":"someEmail"}*/
+
+//router.post('/add/nutrigoal', ctrlUser.addNutriGoal);  /* Adds a nutrition goal to an user matching the given email. JSON body payload format :: {"email":"someEmail, "nutri_goal":{"calories":"someString", "carbs":"someString", "fiber":"someString", "effective":"a date", "expires":"a date"}}*/
+//router.get('/get/nutrigoal/all/:email', ctrlUser.getNutriGoals);  /* Returns all nutrition goals of a user matching the given email. JSON body payload format :: {"email":"someEmail"}*/
 
 
 
