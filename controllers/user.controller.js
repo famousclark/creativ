@@ -1,8 +1,12 @@
 
 const User = require('../models/user.model') ;
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const validateRegisterInput = require("../validation/register");
+const validateLoginInput = require("../validation/login");
 
 
-module.exports.saveUser = (req,res,next) => {
+exports.saveUser = (req,res,next) => {
     var user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
@@ -18,7 +22,7 @@ module.exports.saveUser = (req,res,next) => {
     });
 }
 
-module.exports.getAllUsers = (req,res) => {
+exports.getAllUsers = (req,res) => {
 
     User.find().sort('-name').find(function (err, users) {
         if(!err) {
@@ -31,7 +35,7 @@ module.exports.getAllUsers = (req,res) => {
 
 }
 
-module.exports.getUserByEmail = (req, res, next) => {
+exports.getUserByEmail = (req, res, next) => {
   console.log(req.params.email);
     User.findOne({ email: req.params.email },
         (err, user) => {
@@ -45,11 +49,11 @@ module.exports.getUserByEmail = (req, res, next) => {
 
 
 
-module.exports.editUser = (req,res,next) => {
+exports.updateUser = (req,res,next) => {
   console.log(req.body);
 
   User.findOneAndUpdate(
-      { email: req.body.email },
+      { email: req.params.email },
       { $set: {
           // macros : req.body.macros,
           // email : req.body.email,
@@ -74,7 +78,95 @@ module.exports.editUser = (req,res,next) => {
   );
 }
 
-module.exports.deleteUser  = (req,res,next) => {
+exports.registerUser = (req, res, next) => {
+  console.log(req.body);
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  User.findOne({ email: req.body.email }).then(user => {
+    if (user) {
+      return res.status(400).json({ email: "Email already exists" });
+    } else {
+      const newUser = new User();
+      newUser.name = req.body.name;
+      newUser.email  =  req.body.email;
+      newUser.password  =  req.body.password;
+
+      // Hash password before saving in database
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+          newUser
+            .save()
+            .then(user => res.json(user))
+            .catch(err => console.log(err));
+        });
+      });
+    }
+  });
+}
+
+exports.loginUser = (req, res, next) => {
+  console.log(req.body);
+
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // Find user by email
+  User.findOne({ email }).then(user => {
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ emailnotfound: "Email not found" });
+    }
+
+    // Check password
+    bcrypt.compare(password, user.password).then(isMatch => {
+      if (isMatch) {
+        // User matched
+        // Create JWT Payload
+        const payload = {
+          id: user.id,
+          name: user.name,
+          email: user.email
+
+        };
+
+        // Sign token
+        jwt.sign(
+          payload,
+          database.secretOrKey,
+          {
+            expiresIn: 31556926 // 1 year in seconds
+          },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: "Bearer " + token
+            });
+          }
+        );
+      } else {
+        return res
+          .status(400)
+          .json({ passwordincorrect: "Password incorrect" });
+      }
+    });
+  });
+}
+
+exports.deleteUser  = (req, res, next) => {
 
     User.remove({ email: req.params.email }, function(err) {
         if (!err) {

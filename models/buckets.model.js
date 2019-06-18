@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 var bucketsSchema = mongoose.Schema({
   catagory:{
     type: String,
-    required: 'Full name can\'t be empty',
+    required: 'can\'t be empty',
     unique: true,
     index: true,
   },
