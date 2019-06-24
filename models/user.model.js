@@ -1,29 +1,39 @@
 //load the things we need
-var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+const mongoose = require('mongoose');
+const bcrypt   = require('bcrypt-nodejs');
+const Schema = mongoose.Schema;
 
 //define the schema for our user model
-var userSchema = new mongoose.Schema({
-	//_id:{ type: Number, default: 1 },
+const userSchema = new mongoose.Schema({
+
+	_id: Schema.Types.ObjectId,
+
 	name:  {
     type: String,
     required: 'Full name can\'t be empty'
   },
+
 	email:  {
     type: String,
     required: 'Email can\'t be empty',
-    unique: true,
-    index: true
   },
+
   password: {
     type: String,
     required: 'Password name can\'t be empty',
     minlength : [4,'Password must be at least 4 character long']
   },
+
   date: {
   	type: Date,
     default: Date.now
-  }
+  },
+
+	roles: [{ type: Schema.Types.ObjectId, ref: 'Role' }],
+
+	profile:{
+		ownedBuckets: [{ type : Schema.Types.ObjectId, ref: 'Bucket'}]
+	}
 });
 
 
@@ -44,4 +54,4 @@ userSchema.path('email').validate((val) => {
 }, 'Invalid e-mail.');
 
 //create the model for users and expose it to our app
-module.exports = mongoose.model('users', userSchema);
+module.exports = mongoose.model('User', userSchema);

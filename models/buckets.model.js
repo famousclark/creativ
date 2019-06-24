@@ -1,18 +1,20 @@
-
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var bucketsSchema = mongoose.Schema({
-  catagory:{
-    type: String,
-    required: 'can\'t be empty',
-    unique: true,
-    index: true,
-  },
+const bucketSchema = mongoose.Schema({
+
+  _id: Schema.Types.ObjectId,
+
   numOfSortables: Number,
-  sortables: [{
-    annotation: String
-  }],
+
+  catagory:{ type: String, required: 'can\'t be empty' },
+
+  owner:{ type : Schema.Types.ObjectId, ref: 'User' },
+
+  sortables: [{ type : Schema.Types.ObjectId, ref: 'Annotation'}],
+
+  joinedCatagories: [{ type : Schema.Types.ObjectId, ref: 'Bucket'}]
 
 });
 
-module.exports = mongoose.model('buckets', bucketsSchema);
+module.exports = mongoose.model('Bucket', bucketSchema);

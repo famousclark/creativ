@@ -1,14 +1,26 @@
 const express = require("express");
 const router = express.Router();
+const authJwt = require('../validation/verifyJwtToken');
 const bucketController = require("../../controllers/buckets.controller");
 
 router
-  .get('/getAll', bucketController.getAllBuckets)
-  .post('/addBucket', bucketController.addBucket);
+  .post('/addBucket', bucketController.addBucket)
+  .post('/mergeAndCreateNewBucket', bucketController.mergeAndCreateNewBucket);
 
 router
-  .get('/:catagory', bucketController.getBucketByCatagory)
-  .put('/:catagory', bucketController.updateBucket)
-  .delete('/:catagory', bucketController.deleteBucket);
+  .put('/renameBucket', bucketController.renameBucket)
+  .put('/leftMergeBuckets', bucketController.leftMergeBuckets)
+  .put('/rightMergeBuckets', bucketController.rightMergeBuckets)
+  .put('/addAnnotationByCatagory', bucketController.addAnnotationByCatagory);
+
+router
+  .delete('/deleteAnnotationByCatagory', bucketController.deleteAnnotationByCatagory)
+  .delete('/deleteBucketByCatagory/', bucketController.deleteBucketByCatagory);
+
+router
+  .get('/findAllBuckets', bucketController.findAllBuckets)
+  .get('/findBucketByCatagory', bucketController.findBucketByCatagory)
+  .get('/findBucketByAnnotation', bucketController.findBucketByAnnotation)
+  .get('/findAllAnnotationsByBucket', bucketController.findAllAnnotationsByBucket);
 
 module.exports = router;
