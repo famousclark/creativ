@@ -35,29 +35,13 @@ exports.registerUser = (req, res, next) => {
   }).catch(err => {
       res.status(500).send("Fail! Error -> " + err);
   });
-}
-
-exports.saveUser = (req,res,next) => {
-    var user = new User();
-    user.name = req.body.name;
-    user.email = req.body.email;
-    user.password = req.body.password;
-
-    user.save((err, user) => {
-        if(!err) {
-            res.send(user);
-        }
-        else {
-            return next(err);
-        }
-    });
-}
+};
 
 exports.updateUser = (req,res,next) => {
   console.log(req.body);
 
-  const query = { email: req.body.email };
-  const update =  { "$set": {"name": req.body.name}};
+  const query = { _id: req.userId };
+  const update =  { "$set": {"name": req.body.name, "email": req.body.email}};
   const options = {new: true};
 
   User.findOneAndUpdate(query, update, options)
@@ -83,7 +67,7 @@ exports.updateUser = (req,res,next) => {
       "user": user
     });
   });
-}
+};
 
 exports.findAllUsers = (req,res) => {
 
@@ -107,10 +91,10 @@ exports.findAllUsers = (req,res) => {
     }
     res.status(200).json({
       "description": "Admin Board",
-      "user": user
+      "user": users
     });
   });
-}
+};
 
 exports.adminBoard = (req, res) => {
   User.findOne({ _id: req.userId })
@@ -137,7 +121,7 @@ exports.adminBoard = (req, res) => {
       "user": user
     });
   });
-}
+};
 
 exports.findUserProfile = (req, res, next) => {
   User.findOne({ _id: req.userId })
@@ -159,7 +143,7 @@ exports.findUserProfile = (req, res, next) => {
       "user": user
     });
   });
-}
+};
 
 exports.signInUser = (req, res, next) => {
   console.log(req.body);
@@ -188,7 +172,7 @@ exports.signInUser = (req, res, next) => {
 
     res.status(200).send({ auth: true, accessToken: token });
   });
-}
+};
 
 exports.deleteUser = (req, res, next) => {
 
@@ -253,5 +237,5 @@ exports.deleteUser = (req, res, next) => {
     });
 
     return res.status(200).json({message: `succesfully deleted `, response: response});
-  })
-}
+  });
+};

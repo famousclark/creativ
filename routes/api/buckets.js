@@ -15,7 +15,7 @@ router
 
 router
   .delete('/deleteAnnotationByCatagory', bucketController.deleteAnnotationByCatagory)
-  .delete('/deleteBucketByCatagory/', bucketController.deleteBucketByCatagory);
+  .delete('/deleteBucketByCatagory', bucketController.deleteBucketByCatagory);
 
 router
   .get('/findAllBuckets', bucketController.findAllBuckets)

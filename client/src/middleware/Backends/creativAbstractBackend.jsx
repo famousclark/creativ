@@ -1,4 +1,4 @@
-export default class UREatsAbstractBackend{
+export default class creativAbstractBackend{
   _post(url: string, body: Object | FormData, params: Object): Promise {
     return new Promise((resolve, reject) => {
       fetch(url, {

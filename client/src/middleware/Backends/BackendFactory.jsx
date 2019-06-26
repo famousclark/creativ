@@ -1,6 +1,6 @@
-import UREatsNodeBackend from './UREatsNodeBackend';
+import creativNodeBackend from './creativNodeBackend';
 
-export default function UREatsBackendFactory() {
+export default function creativBackendFactory() {
 
-  return new UREatsNodeBackend();
+  return new creativNodeBackend();
 }

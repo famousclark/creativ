@@ -1,74 +1,61 @@
 
 // constants
 import {
-  USER_REGISTER,
-  USER_LOG_IN,
-
-  USER_REGISTERED,
-  USER_LOGGED_IN,
-
-  GET_USER,
-  USER_LOADED,
+  GET_USER_PROFILE,
   GET_ALL_USERS,
-  ALL_USERS_LOADED,
-  EDIT_USER,
-  USER_EDITED,
+  UPDATE_USER,
   DELETE_USER,
-  USER_DELETED,
-  ADD_USER,
-  USER_ADDED,
+  USER_REGISTER,
+  USER_SIGN_IN,
 
-  ADD_USER_MEAL,
-  USER_MEAL_ADDED,
-  DELETE_USER_MEAL,
-  USER_MEAL_DELETED,
-  GET_ALL_USER_MEALS,
-  ALL_USER_MEALS_LOADED,
-  RESET_MEALS,
+  RENAME_BUCKET,
+  LEFT_MERGE_BUCKETS,
+  RIGHT_MERGE_BUCKETS,
+  ADD_BUCKET,
+  MERGE_AND_CREATE_NEW_BUCKET,
+  DELETE_BUCKET_BY_CATAGORY,
+  GET_BUCKET_BY_CATAGORY,
+  GET_BUCKET_BY_ANNOTATION,
+  GET_ALL_BUCKETS,
 
-  EDIT_DPLAN,
-  DPLAN_EDITED,
-
-  ADD_SPEND_GOAL,
-  SPEND_GOAL_ADDED,
-  GET_ALL_SPEND_GOALS,
-  ALL_SPEND_GOALS_LOADED,
-
-  ADD_NUTRI_GOAL,
-  NUTRI_GOAL_LOADED,
-  GET_ALL_NUTRI_GOALS,
-  ALL_NUTRI_GOALS_LOADED,
-
-  GET_ALL_MEALS,
-  ALL_MEALS_LOADED,
-  GET_MEAL,
-  MEAL_LOADED,
-  ADD_MEAL,
-  MEAL_ADDED,
-  EDIT_MEAL,
-  MEAL_EDITED,
-  DELETE_MEAL,
-  MEAL_DELETED,
-  GET_ALL_MEALS_BY_RESTAURANT,
-  ALL_MEALS_BY_RESTAURANT_LOADED,
-
-  GET_ALL_RESTAURANTS,
-  ALL_RESTAURANTS_LOADED,
-  GET_RESTAURANT,
-  RESTAURANT_LOADED,
-  ADD_RESTAURANT,
-  RESTAURANT_ADDED,
-  EDIT_RESTAURANT,
-  RESTAURANT_EDITED,
-  DELETE_RESTAURANT,
-  RESTAURANT_DELETED,
-
-  GET_ALL_REVIEWS,
-  GET_REVIEW_BY_REVIEW,
-  GET_REVIEW_BY_RESTAURANT,
-  ADD_REVIEW
+  DELETE_ANNOTATION_BY_CATAGORY,
+  ADD_ANNOTATION_BY_CATAGORY,
+  GET_ALL_ANNOTATIONS_BY_BUCKET
 
 } from "../constants/actions";
+
+//*********************************************************
+//****************** User cases *************************
+//*********************************************************
+
+export const getUserProfile = (token: String): Object => {
+  return {
+    type: GET_USER_PROFILE,
+    token: token
+  };
+};
+
+export const getAllUsers = (token: String): Object => {
+  return {
+    type: GET_ALL_USERS,
+    token: token
+  };
+};
+
+export const updateUser = (userData: Object, token: String): Object => {
+  return {
+    type: UPDATE_USER,
+    userData: userData,
+    token: token
+  };
+};
+
+export const deleteUser = (token: String): Object => {
+  return {
+    type: DELETE_USER,
+    token: token
+  };
+};
 
 export const registerUser = (userData: Object): Object => {
   return {
@@ -77,217 +64,106 @@ export const registerUser = (userData: Object): Object => {
   };
 };
 
-export const loginUser= (userData: Object): Object => {
+export const signInUser= (userData: Object): Object => {
   return {
-    type: USER_LOG_IN,
+    type: USER_SIGN_IN,
     userData: userData
   };
 };
 
-export const getUser = (email: String): Object => {
+//*********************************************************
+//****************** Bucket cases *************************
+//*********************************************************
+
+export const renameBucket = (userData: Object, token: String): Object => {
   return {
-    type: GET_USER,
-    email: email
+    type: RENAME_BUCKET,
+    userData: userData,
+    token: token
   };
 };
 
-export const getAllUsers = (): Object => {
+export const leftMergeBuckets = (userData: Object, token: String): Object => {
   return {
-    type: GET_ALL_USERS
+    type: LEFT_MERGE_BUCKETS,
+    userData: userData,
+    token: token
   };
 };
 
-export const editUser = (userData: Object): Object => {
+export const rightMergeBuckets = (userData: Object, token: String): Object => {
   return {
-    type: EDIT_USER,
-    userData: userData
+    type: RIGHT_MERGE_BUCKETS,
+    userData: userData,
+    token: token
   };
 };
 
-export const deleteUser = (email: String): Object => {
+export const addBucket = (userData: Object, token: String): Object => {
   return {
-    type: DELETE_USER,
-    email: email
+    type: ADD_BUCKET,
+    userData: userData,
+    token: token
   };
 };
 
-export const addUser = (userData: Object): Object => {
+export const mergeAndCreateNewBucket = (userData: Object, token: String): Object => {
   return {
-    type: ADD_USER,
-    userData: userData
+    type: MERGE_AND_CREATE_NEW_BUCKET,
+    userData: userData,
+    token: token
   };
 };
 
-/*===============USER MEAL Actions===============*/
-export const getAllUserMeals = (email: String): Object => {
+export const deleteBucketByCatagory = (token: String): Object => {
   return {
-    type: GET_ALL_USER_MEALS,
-    email: email
+    type: DELETE_BUCKET_BY_CATAGORY,
+    token: token
   };
 };
 
-export const addUserMeal = (mealData: Object): Object => {
+export const getBucketByAnnotation = (token: String): Object => {
   return {
-    type: ADD_USER_MEAL,
-    mealData: mealData
+    type: GET_BUCKET_BY_ANNOTATION,
+    token: token
   };
 };
 
-export const deleteUserMeal = (email: String): Object => {
+export const getBucketByCatagory = (token: String): Object => {
   return {
-    type: DELETE_USER_MEAL,
-    email: email
+    type: GET_BUCKET_BY_CATAGORY,
+    token: token
   };
 };
 
-export const editDPlan = (dPlanData: Object): Object => {
+export const getAllBuckets = (token: String): Object => {
   return {
-    type: EDIT_DPLAN,
-    dPlanData: dPlanData
+    type: GET_ALL_BUCKETS,
+    token: token
   };
 };
 
-export const addSpendGoal = (spendGoalData: Object): Object => {
+//*********************************************************
+//****************** Annotation cases *************************
+//*********************************************************
+
+export const deleteAnnotationByCatagory = (token: String): Object => {
   return {
-    type: ADD_SPEND_GOAL,
-    spendGoalData: spendGoalData
+    type: DELETE_ANNOTATION_BY_CATAGORY,
+    token: token
   };
 };
 
-export const getAllSpendGoals = (email: String): Object => {
+export const addAnnotationByCatagory = (token: String): Object => {
   return {
-    type: GET_ALL_SPEND_GOALS,
-    email: email
+    type: ADD_ANNOTATION_BY_CATAGORY,
+    token: token
   };
 };
 
-export const addNurtiGoal = (nutriGoalData: Object): Object => {
+export const getAllAnnotationsByBucket = (token: String): Object => {
   return {
-    type: ADD_NUTRI_GOAL,
-    nutriGoalData: nutriGoalData
+    type: GET_ALL_ANNOTATIONS_BY_BUCKET,
+    token: token
   };
 };
-
-export const getAllNutriGoals = (email: String): Object => {
-  return {
-    type: GET_ALL_NUTRI_GOALS,
-    email: email
-  };
-};
-
-export const resetMeals = (): Object => {
-  return {
-    type: RESET_MEALS
-  }
-}
-
-/*===============USER MEAL Actions===============*/
-
-/*===============MEAL Actions===============*/
-
-export const getMeal = (meal_id: String): Object => {
-  return {
-    type: GET_MEAL,
-    meal_id: meal_id
-  };
-};
-
-export const getAllMeals = (): Object => {
-  return {
-    type: GET_ALL_MEALS
-  };
-};
-
-export const editMeal = (mealData: Object): Object => {
-  return {
-    type: EDIT_MEAL,
-    mealData: mealData
-  };
-};
-
-export const deleteMeal = (meal_id: String): Object => {
-  return {
-    type: DELETE_MEAL,
-    meal_id: meal_id
-  };
-};
-
-export const addMeal = (mealData: Object): Object => {
-  return {
-    type: ADD_MEAL,
-    mealData: mealData
-  };
-};
-/*===============MEAL Actions===============*/
-
-/*===============RESTAURANT Actions===============*/
-export const getRestaurant = (r_code: String): Object => {
-  return {
-    type: GET_RESTAURANT,
-    r_code: r_code
-  };
-};
-
-export const getAllRestaurants = (): Object => {
-  return {
-    type: GET_ALL_RESTAURANTS
-  };
-};
-
-export const editRestaurant = (restaurantData: Object): Object => {
-  return {
-    type: EDIT_RESTAURANT,
-    restaurantData: restaurantData
-  };
-};
-
-export const deleteRestaurant = (r_code: String): Object => {
-  return {
-    type: DELETE_RESTAURANT,
-    r_code: r_code
-  };
-};
-
-export const getAllMealsByRestaurant = (r_code: String): Object => {
-  return {
-    type: GET_ALL_MEALS_BY_RESTAURANT,
-    r_code: r_code
-  };
-};
-
-export const addRestaurant = (restaurantData: Object): Object => {
-  return {
-    type: ADD_RESTAURANT,
-    restaurantData: restaurantData
-  };
-};
-/*===============RESTAURANT Actions===============*/
-
-/*===============REVIEW Actions===============*/
-export const getReviewByRestaurant = (r_code: String): Object => {
-  return {
-    type: GET_REVIEW_BY_RESTAURANT,
-    r_code: r_code
-  };
-};
-
-export const getAllReviews = (): Object => {
-  return {
-    type: GET_ALL_REVIEWS
-  };
-};
-
-export const getReviewByReview = (meal_id: String): Object => {
-  return {
-    type: GET_REVIEW_BY_REVIEW,
-    meal_id: meal_id
-  };
-};
-
-export const addReview = (reviewData: Object): Object => {
-  return {
-    type: ADD_REVIEW,
-    reviewData: reviewData
-  };
-};
-/*===============REVIEW Actions===============*/

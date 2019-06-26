@@ -18,36 +18,28 @@ const sleep = (duration: Number): Promise => {
   });
 }
 
-function* userSaga(userAction: Object): Generator<any, any, any> {
+//*********************************************************
+//********************* User cases ************************
+//*********************************************************
+
+function* getUserProfileSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getUser(userAction.email);
-    console.log(loaded);
-    yield put({ type: ActionConstants.USER_LOADED, info: loaded });
+    const loaded = yield backend.getUserProfile(userAction.userData, userAction.token);
+    //console.log(loaded);
+    yield put({ type: ActionConstants.USER_PROFILE_LOADED, info: loaded });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* allUsersSaga(userAction: Object): Generator<any, any, any> {
+function* getAllUsersSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getAllUsers();
+    const loaded = yield backend.getAllUsers(userAction.userData, userAction.token);
     //console.log(loaded);
     yield put({ type: ActionConstants.ALL_USERS_LOADED, info: loaded });
-    //yield sleep(5000);
-  } catch (e) {
-    console.log("error");
-  }
-}
-
-function* editUserSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
-  try {
-    const edited = yield backend.editUser(userAction);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.USER_EDITED, info: edited });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
@@ -56,36 +48,24 @@ function* editUserSaga(userAction: Object): Generator<any, any, any> {
   }
 }
 
+function* updateUserSaga(userAction: Object): Generator<any, any, any> {
+  console.log("this fired");
+  try {
+    const updated = yield backend.updateUser(userAction.userData, userAction.token);
+    //console.log(loaded);
+    yield put({ type: ActionConstants.USER_UPDATED, info: updated });
+    //yield sleep(5000);
+  } catch (e) {
+    console.log("error");
+  }
+}
+
 function* deleteUserSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const deleted = yield backend.deleteUser(userAction.email);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.USER_DELETED, info: deleted });
-    //yield sleep(5000);
-  } catch (e) {
-    console.log("error");
-  }
-}
+    const added = yield backend.deleteUser(userAction.userData, userAction.token);
 
-function* addUserSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
-  try {
-    const added = yield backend.addUser(userAction);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.USER_ADDED, info: added });
-    //yield sleep(5000);
-  } catch (e) {
-    console.log("error");
-  }
-}
-
-function* logInUserSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
-  try {
-    const added = yield backend.loginUser(userAction);
-
-    yield put({ type: ActionConstants.USER_LOGGED_IN, info: added });
+    yield put({ type: ActionConstants.USER_DELETED, info: added });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
@@ -95,7 +75,7 @@ function* logInUserSaga(userAction: Object): Generator<any, any, any> {
 function* registerUserSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const added = yield backend.registerUser(userAction);
+    const added = yield backend.registerUser(userAction.userData);
     //console.log(loaded);
     yield put({ type: ActionConstants.USER_REGISTERED, info: added });
     //yield sleep(5000);
@@ -104,270 +84,281 @@ function* registerUserSaga(userAction: Object): Generator<any, any, any> {
   }
 }
 
-function* getAllUserMealsSaga(userAction: Object): Generator<any, any, any> {
+function* signInUserSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getAllUserMeals();
+    const added = yield backend.signInUser(userAction.userData);
     //console.log(loaded);
-    yield put({ type: ActionConstants.GET_ALL_USER_MEALS, info: loaded });
+    yield put({ type: ActionConstants.USER_SIGNED_IN, info: added });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* addUserMealSaga(userAction: Object): Generator<any, any, any> {
+//*********************************************************
+//****************** Bucket cases *************************
+//*********************************************************
+function* renameBucketSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const added = yield backend.addUserMeal(userAction);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.ADD_USER_MEAL, info: added });
+    const updated = yield backend.renameBucket(userAction.userData, userAction.token);
+    console.log(updated);
+    yield put({ type: ActionConstants.BUCKET_RENAMED, info: updated });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* deleteUserMealSaga(userAction: Object): Generator<any, any, any> {
+function* leftMergeBucketsSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const deleted = yield backend.deleteUserMeal(userAction.meal_id);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.DELETE_USER_MEAL, info: deleted });
+    const updated = yield backend.leftMergeBuckets(userAction.userData, userAction.token);
+    console.log(updated);
+    yield put({ type: ActionConstants.BUCKETS_LEFT_MERGED, info: updated });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* editDPlanSaga(userAction: Object): Generator<any, any, any> {
+function* rightMergeBucketsSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const edit = yield backend.editDPlan(userAction);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.ADD_USER_MEAL, info: edit });
+    const updated = yield backend.rightMergeBuckets(userAction.userData, userAction.token);
+    console.log(updated);
+    yield put({ type: ActionConstants.BUCKETS_RIGHT_MERGED, info: updated });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* addSpendGoalSaga(userAction: Object): Generator<any, any, any> {
+function* addBucketSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const added = yield backend.addUser(userAction);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.ADD_USER_MEAL, info: added });
+    const added = yield backend.addBucket(userAction.userData, userAction.token);
+    console.log(added);
+    yield put({ type: ActionConstants.BUCKET_ADDED, info: added });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* getAllSpendGoalsSaga(userAction: Object): Generator<any, any, any> {
+function* mergeAndCreateNewBucketSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getAllSpendGoals();
-    //console.log(loaded);
-    yield put({ type: ActionConstants.GET_ALL_SPEND_GOALS, info: loaded });
+    const added = yield backend.mergeAndCreateNewBucket(userAction.userData, userAction.token);
+    console.log(added);
+    yield put({ type: ActionConstants.BUCKETS_MERGED_AND_CREATE_NEW, info: added });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* addNutriGoalSaga(userAction: Object): Generator<any, any, any> {
+function* deleteBucketByCatagorySaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const added = yield backend.addUser(userAction);
+    const deleted = yield backend.deleteBucketByCatagory(userAction.userData, userAction.token);
     //console.log(loaded);
-    yield put({ type: ActionConstants.ADD_NUTRI_GOAL, info: added });
+    yield put({ type: ActionConstants.BUCKET_BY_CATAGORY_DELETED, info: deleted });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* getAllNutriGoalsSaga(userAction: Object): Generator<any, any, any> {
+function* getBucketByCatagorySaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.addUser(userAction);
+    const loaded = yield backend.getBucketByCatagory(userAction.userData, userAction.token);
     //console.log(loaded);
-    yield put({ type: ActionConstants.GET_ALL_NUTRI_GOALS, info: loaded });
+    yield put({ type: ActionConstants.BUCKET_BY_CATAGORY_LOADED, info: loaded });
+    //yield sleep(5000);
+  } catch (e) {
+    console.log("error");
+    console.log(e);
+
+  }
+}
+
+function* getBucketByAnnotationSaga(userAction: Object): Generator<any, any, any> {
+  console.log("this fired");
+  try {
+    const loaded = yield backend.getBucketByAnnotation(userAction.userData, userAction.token);
+    //console.log(loaded);
+    yield put({ type: ActionConstants.BUCKET_BY_ANNOTATION_LOADED, info: loaded });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* getAllRestaurantsSaga(): Generator<any, any, any> {
+function* getAllBucketsSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getAllRestaurants();
+    const loaded = yield backend.getAllBuckets(userAction.token);
     //console.log(loaded);
-    yield put({ type: ActionConstants.ALL_RESTAURANTS_LOADED, info: loaded });
+    yield put({ type: ActionConstants.ALL_BUCKETS_LOADED, info: loaded });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* getAllMealsByRestaurantSaga(userAction): Generator<any, any, any> {
+//*********************************************************
+//****************** Annotation cases *********************
+//*********************************************************
+
+function* deleteAnnotationByCatagorySaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getAllMealsByRestaurant(userAction.r_code);
+    const deleted = yield backend.deleteAnnotationByCatagory(userAction.userData, userAction.token);
     //console.log(loaded);
-    yield put({ type: ActionConstants.ALL_MEALS_BY_RESTAURANT_LOADED, info: loaded });
+    yield put({ type: ActionConstants.ANNOTATION_BY_CATAGORY_DELETED, info: deleted });
+    //yield sleep(5000);
+  } catch (e) {
+    console.log("error");
+    console.log(e);
+
+  }
+}
+
+function* addAnnotationByCatagorySaga(userAction: Object): Generator<any, any, any> {
+  console.log("this fired");
+  try {
+    const added = yield backend.addAnnotationByCatagory(userAction.userData, userAction.token);
+    //console.log(loaded);
+    yield put({ type: ActionConstants.ANNOTATION_BY_CATAGORY_ADDED, info: added });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* getAllReviewsSaga(): Generator<any, any, any> {
+function* getAllAnnotationsByBucketSaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getAllReviews();
+    const loaded = yield backend.getAllAnnotationsByBucket(userAction.token);
     //console.log(loaded);
-    yield put({ type: ActionConstants.ALL_REVIEWS_LOADED, info: loaded });
+    yield put({ type: ActionConstants.ALL_ANNOTATIONS_BY_BUCKET_LOADED, info: loaded });
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
   }
 }
 
-function* resetMealsSaga(): Generator<any, any, any> {
-  try {
-    const loaded = [];
-    yield put({ type: ActionConstants.MEALS_RESET, info: loaded });
-  } catch (e) {
-    console.log("error");
-  }
-}
 
 /*************************** Observers ****************************************/
 
-export function* watchForGetUser(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.GET_USER, userSaga);
+//*********************************************************
+//****************** User cases ***************************
+//*********************************************************
+
+export function* watchForGetUserProfile(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.GET_USER_PROFILE, getUserProfileSaga);
 }
 
 export function* watchForGetAllUsers(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.GET_ALL_USERS, allUsersSaga);
+  yield takeEvery(ActionConstants.GET_ALL_USERS, getAllUsersSaga);
 }
 
-export function* watchForEditUser(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.EDIT_USER, editUserSaga);
+export function* watchForUpdateUser(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.UPDATE_USER, updateUserSaga);
 }
 
 export function* watchForDeleteUser(): Generator<any, any, any> {
   yield takeEvery(ActionConstants.DELETE_USER, deleteUserSaga);
 }
 
-export function* watchForAddUser(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.ADD_USER, addUserSaga);
-}
-
-export function* watchForLogInUser(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.USER_LOG_IN, logInUserSaga);
-}
-
 export function* watchForRegisterUser(): Generator<any, any, any> {
   yield takeEvery(ActionConstants.USER_REGISTER, registerUserSaga);
 }
 
-
-export function* watchForGetAllUserMeals(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.GET_ALL_USER_MEALS, getAllUserMealsSaga);
+export function* watchForSignInUser(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.USER_SIGN_IN, signInUserSaga);
 }
 
-export function* watchForAddUserMeal(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.ADD_USER_MEAL, addUserMealSaga);
+//*********************************************************
+//****************** Bucket cases *************************
+//*********************************************************
+export function* watchForRenameBucket(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.RENAME_BUCKET, renameBucketSaga);
 }
 
-export function* watchForDeleteUserMeal(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.DELETE_USER_MEAL, deleteUserMealSaga);
+export function* watchForLeftMergeBuckets(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.LEFT_MERGE_BUCKETS, leftMergeBucketsSaga);
 }
 
-export function* watchForEditDPlan(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.EDIT_DPLAN, editDPlanSaga);
+export function* watchForRightMergeBuckets(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.RIGHT_MERGE_BUCKETS, rightMergeBucketsSaga);
 }
 
-export function* watchForAddSpendGoal(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.ADD_SPEND_GOAL, addSpendGoalSaga);
+export function* watchForAddBucket(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.ADD_BUCKET, addBucketSaga);
 }
 
-export function* watchForGetAllSpendGoals(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.GET_ALL_SPEND_GOALS, getAllSpendGoalsSaga);
+export function* watchForMergeAndCreateNewBucket(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.MERGE_AND_CREATE_NEW_BUCKET, mergeAndCreateNewBucketSaga);
 }
 
-export function* watchForAddNutriGoal(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.ADD_NUTRI_GOAL, addNutriGoalSaga);
+export function* watchForDeleteBucketByCatagory(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.DELETE_BUCKET_BY_CATAGORY, deleteBucketByCatagorySaga);
 }
 
-export function* watchForGetAllNutriGoals(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.GET_ALL_NUTRI_GOALS, getAllNutriGoalsSaga);
+export function* watchForGetBucketByCatagory(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.GET_BUCKET_BY_CATAGORY, getBucketByCatagorySaga);
 }
 
-export function* watchForGetAllRestaurants(): Generator<any, any, any> {
-  //console.log("this fired");
-  yield takeEvery(ActionConstants.GET_ALL_RESTAURANTS, getAllRestaurantsSaga);
+export function* watchForGetBucketByAnnotation(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.GET_BUCKET_BY_ANNOTATION, getBucketByAnnotationSaga);
 }
 
-export function* watchForGetAllMealsByRestaurants(): Generator<any, any, any> {
-  //console.log("this fired");
-  yield takeEvery(ActionConstants.GET_ALL_MEALS_BY_RESTAURANT, getAllMealsByRestaurantSaga);
+export function* watchForGetAllBuckets(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.GET_ALL_BUCKETS, getAllBucketsSaga);
 }
 
-export function* watchForGetAllReviews(): Generator<any, any, any> {
-  yield takeEvery(ActionConstants.GET_ALL_REVIEWS, getAllReviewsSaga);
+//*********************************************************
+//****************** Annotation cases *********************
+//*********************************************************
+
+
+export function* watchForDeleteAnnotationByCatagory(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.DELETE_ANNOTATION_BY_CATAGORY, deleteAnnotationByCatagorySaga);
 }
 
-export function* watchForResetMeals(): Generator<any, any, any> {
-  //console.log("this fired");
-  yield takeEvery(ActionConstants.RESET_MEALS, resetMealsSaga);
+export function* watchForAddAnnotationByCatagory(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.ADD_ANNOTATION_BY_CATAGORY, addAnnotationByCatagorySaga);
 }
 
+export function* watchForGetAllAnnotationsByBucket(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.GET_ALL_ANNOTATIONS_BY_BUCKET, getAllAnnotationsByBucketSaga);
+}
 
 export default function* rootSaga(): Generator<any, any, any> {
   yield all([
-    watchForGetUser(),
+    watchForGetUserProfile(),
     watchForGetAllUsers(),
-    watchForEditUser(),
+    watchForUpdateUser(),
     watchForDeleteUser(),
-    watchForAddUser(),
     watchForRegisterUser(),
-    watchForLogInUser(),
+    watchForSignInUser(),
 
-    watchForGetAllUserMeals(),
-    watchForAddUserMeal(),
-    watchForDeleteUserMeal(),
-    watchForEditDPlan(),
-    watchForAddSpendGoal(),
-    watchForGetAllSpendGoals(),
-    watchForAddNutriGoal(),
-    watchForGetAllNutriGoals(),
+    watchForRenameBucket(),
+    watchForLeftMergeBuckets(),
+    watchForRightMergeBuckets(),
+    watchForAddBucket(),
+    watchForMergeAndCreateNewBucket(),
+    watchForDeleteBucketByCatagory(),
+    watchForGetBucketByCatagory(),
+    watchForGetBucketByAnnotation(),
+    watchForGetAllBuckets(),
 
-    watchForGetAllRestaurants(),
-    watchForGetAllMealsByRestaurants(),
-    watchForGetAllReviews(),
-    watchForResetMeals()
-
-/*
-    watchForGetMeal(),
-    watchForGetAllMeals(),
-    watchForEditMeal(),
-    watchForDeleteMeal(),
-    watchForAddMeal(),
-
-    watchForGetRestaurant(),
-    watchForGetAllRestaurants(),
-    watchForEditRestaurant(),
-    watchForDeleteRestaurant(),
-    watchForAddRestaurant(),
-
-    watchForGetReviewByRestaurant(),
-    watchForGetAllReviews(),
-    watchForGetReviewByReview(),
-    watchForAddReview()*/
+    watchForDeleteAnnotationByCatagory(),
+    watchForAddAnnotationByCatagory(),
+    watchForGetAllAnnotationsByBucket()
   ]);
 }

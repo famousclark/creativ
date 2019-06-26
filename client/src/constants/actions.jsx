@@ -1,76 +1,68 @@
 
 // REST
-export const GET_USER: string = 'GET_USER';
-export const USER_LOADED: string = 'USER_LOADED';
-export const GET_ALL_USERS: string = 'GET_ALL_USER';
-export const ALL_USERS_LOADED: string = 'ALL_USERS_LOADED';
-export const EDIT_USER: string = 'EDIT_USER';
-export const USER_EDITED: string = 'USER_EDITED';
-export const DELETE_USER: string = 'DELETE_USER';
-export const USER_DELETED: string = 'USER_DELETED';
-export const ADD_USER: string = 'ADD_USER';
-export const USER_ADDED: string = 'USER_ADDED';
 
-export const ADD_USER_MEAL: string = 'ADD_USER_MEAL';
-export const USER_MEAL_ADDED: string = 'USER_MEAL_ADDED';
-export const DELETE_USER_MEAL: string = 'DELETE_USER_MEAL';
-export const USER_MEAL_DELETED: string = 'USER_MEAL_DELETED';
-export const GET_ALL_USER_MEALS: string = 'GET_ALL_USER_MEALS';
-export const ALL_USER_MEALS_LOADED: string = 'ALL_USER_MEALS_LOADED';
+//*********************************************************
+//****************** User cases *********************
+//*********************************************************
 
-export const EDIT_DPLAN: string = 'EDIT_DPLAN';
-export const DPLAN_EDITED: string = 'DPLAN_EDITED';
+export const GET_USER_PROFILE: String = 'GET_USER';
+export const USER_PROFILE_LOADED: String = 'USER_LOADED';
 
-export const ADD_SPEND_GOAL: string = 'ADD_SPEND_GOAL';
-export const SPEND_GOAL_ADDED: string = 'SPEND_GOAL_ADDED';
-export const GET_ALL_SPEND_GOALS: string = 'GET_ALL_SPEND_GOALS';
-export const ALL_SPEND_GOALS_LOADED: string = 'ALL_SPEND_GOALS_LOADED';
+export const GET_ALL_USERS: String = 'GET_ALL_USERS';
+export const ALL_USERS_LOADED: String = 'ALL_USERS_LOADED';
 
+export const UPDATE_USER: String = 'UPDATE_USER';
+export const USER_UPDATED: String = 'USER_UPDATED';
 
-export const ADD_NUTRI_GOAL: string = 'ADD_NUTRI_GOAL';
-export const NUTRI_GOAL_LOADED: string = 'NUTRI_GOAL_LOADED';
-export const GET_ALL_NUTRI_GOALS: string = 'GET_ALL_NUTRI_GOALS';
-export const ALL_NUTRI_GOALS_LOADED: string = 'ALL_NUTRI_GOALS_LOADED';
+export const DELETE_USER: String = 'DELETE_USER';
+export const USER_DELETED: String = 'USER_DELETED';
 
-export const GET_ALL_MEALS: string = 'GET_ALL_MEALS';
-export const ALL_MEALS_LOADED: string = 'ALL_MEALS_LOADED';
-export const GET_MEAL: string = 'GET_MEAL';
-export const MEAL_LOADED: string = 'MEAL_LOADED';
-export const ADD_MEAL: string = 'ADD_MEAL';
-export const MEAL_ADDED: string = 'MEAL_ADDED';
-export const EDIT_MEAL: string = 'EDIT_MEAL';
-export const MEAL_EDITED: string = 'MEAL_EDITED';
-export const DELETE_MEAL: string = 'DELETE_MEAL';
-export const MEAL_DELETED: string = 'MEAL_DELETED';
-export const RESET_MEALS: string = 'RESET_MEALS';
-export const MEALS_RESET: string = 'MEALS_RESET';
+export const USER_SIGN_IN: String = 'USER_SIGN_IN';
+export const USER_SIGNED_IN: String = 'USER_SIGNED_IN';
 
-export const GET_ALL_RESTAURANTS: string = 'GET_ALL_RESTAURANTS';
-export const ALL_RESTAURANTS_LOADED: string = 'ALL_RESTAURANTS_LOADED';
-export const GET_RESTAURANT: string = 'GET_RESTAURANT';
-export const RESTAURANT_LOADED: string = 'RESTAURANT_LOADED';
-export const ADD_RESTAURANT: string = 'ADD_RESTAURANT';
-export const RESTAURANT_ADDED: string = 'RESTAURANT_ADDED';
-export const EDIT_RESTAURANT: string = 'EDIT_RESTAURANT';
-export const RESTAURANT_EDITED: string = 'RESTAURANT_EDITED';
-export const DELETE_RESTAURANT: string = 'DELETE_RESTAURANT';
-export const RESTAURANT_DELETED: string = 'RESTAURANT_DELETED';
-export const GET_ALL_MEALS_BY_RESTAURANT: string = 'GET_ALL_MEALS_BY_RESTAURANT';
-export const ALL_MEALS_BY_RESTAURANT_LOADED: string = 'ALL_MEALS_BY_RESTAURANT_LOADED';
+export const USER_REGISTER: String = 'USER_REGISTER';
+export const USER_REGISTERED: String = 'USER_REGISTERED';
 
-export const GET_ALL_REVIEWS: string = 'GET_ALL_REVIEWS';
-export const ALL_REVIEWS_LOADED: string = 'ALL_REVIEWS_LOADED';
-export const GET_REVIEW_BY_REVIEW: string = 'GET_REVIEW_BY_REVIEW';
-export const REVIEW_BY_REVIEW_LOADED: string = 'REVIEW_BY_REVIEW_LOADED';
-export const GET_REVIEW_BY_RESTAURANT: string = 'GET_REVIEW_BY_RESTAURANT';
-export const REVIEW_BY_RESTAURANT_LOADED: string = 'REVIEW_BY_RESTAURANT_LOADED';
-export const ADD_REVIEW: string = 'ADD_REVIEW';
-export const REVIEW_ADDED: string = 'REVIEW_ADDED';
+//*********************************************************
+//****************** Bucket cases *************************
+//*********************************************************
 
-export const USERS_LOADED: string = 'USERS_LOADED';
+export const RENAME_BUCKET: String = 'RENAME_BUCKET';
+export const BUCKET_RENAMED: String = 'BUCKET_RENAMED';
 
-export const USER_LOGGED_IN: string = 'USER_LOGGED_IN';
-export const USER_REGISTERED: string = 'USER_REGISTERED';
+export const LEFT_MERGE_BUCKETS: String = 'LEFT_MERGE_BUCKETS';
+export const BUCKETS_LEFT_MERGED: String = 'BUCKETS_LEFT_MERGED';
 
-export const USER_LOG_IN: string = 'USER_LOG_IN';
-export const USER_REGISTER: string = 'USER_REGISTER';
+export const RIGHT_MERGE_BUCKETS: String = 'RIGHT_MERGE_BUCKETS';
+export const BUCKETS_RIGHT_MERGED: String = 'BUCKETS_RIGHT_MERGED';
+
+export const ADD_BUCKET: String = 'ADD_BUCKET';
+export const BUCKET_ADDED: String = 'BUCKET_ADDED';
+
+export const MERGE_AND_CREATE_NEW_BUCKET: String = 'MERGE_AND_CREATE_NEW_BUCKET';
+export const BUCKETS_MERGED_AND_CREATE_NEW: String = 'BUCKETS_MERGED_AND_CREATE_NEW';
+
+export const DELETE_BUCKET_BY_CATAGORY: String = 'DELETE_BUCKET_BY_CATAGORY';
+export const BUCKET_BY_CATAGORY_DELETED: String = 'BUCKET_BY_CATAGORY_DELETED';
+
+export const GET_BUCKET_BY_CATAGORY: String = 'GET_BUCKET_BY_CATAGORY';
+export const BUCKET_BY_CATAGORY_LOADED: String = 'BUCKET_BY_CATAGORY_LOADED';
+
+export const GET_BUCKET_BY_ANNOTATION: String = 'GET_BUCKET_BY_ANNOTATION';
+export const BUCKET_BY_ANNOTATION_LOADED: String = 'BUCKET_BY_ANNOTATION_LOADED';
+
+export const GET_ALL_BUCKETS: String = 'GET_ALL_BUCKETS';
+export const ALL_BUCKETS_LOADED: String = 'ALL_BUCKETS_LOADED';
+
+//*********************************************************
+//****************** Annotation cases *********************
+//*********************************************************
+
+export const DELETE_ANNOTATION_BY_CATAGORY: String = 'DELETE_ANNOTATION_BY_CATAGORY';
+export const ANNOTATION_BY_CATAGORY_DELETED: String = 'ANNOTATION_BY_CATAGORY_DELETED';
+
+export const ADD_ANNOTATION_BY_CATAGORY: String = 'ADD_ANNOTATION_BY_CATAGORY';
+export const ANNOTATION_BY_CATAGORY_ADDED: String = 'ANNOTATION_BY_CATAGORY_ADDED';
+
+export const GET_ALL_ANNOTATIONS_BY_BUCKET: String = 'GET_ALL_ANNOTATIONS_BY_BUCKET';
+export const ALL_ANNOTATIONS_BY_BUCKET_LOADED: String = 'ALL_ANNOTATIONS_BY_BUCKET_LOADED';

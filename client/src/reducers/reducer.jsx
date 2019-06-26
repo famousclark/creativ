@@ -7,32 +7,34 @@ import * as ActionConstants from '../constants/actions';
 const defaultState = {
 
   userInfo: {},
-  mealInfo: {},
-  restaurantInfo: {},
-
   allUsersInfo: [],
 
-  allMeals: [],
-  allRestaurants: [],
-  allReviews: []
+  bucketInfo: {},
+  allBucketsInfo: [],
+
+  annotationInfo: {},
+  allAnnotationsInfo: []
+
 };
 
 function Reducer(state: Object = defaultState, action: Object) {
 
     switch (action.type) {
-
+//*********************************************************
+//****************** User cases *************************
+//*********************************************************
       case ActionConstants.USER_REGISTERED:
         return{
           ...state,
         }
 
-      case ActionConstants.USER_LOGGED_IN:
+      case ActionConstants.USER_SIGNED_IN:
         return{
           ...state,
           userInfo: action.info
         }
 
-      case ActionConstants.USER_LOADED:
+      case ActionConstants.USER_PROFILE_LOADED:
         return{
           ...state,
           userInfo: action.info
@@ -44,7 +46,7 @@ function Reducer(state: Object = defaultState, action: Object) {
           allUsersInfo: action.info
         }
 
-      case ActionConstants.USER_EDITED:
+      case ActionConstants.USER_UPDATED:
         return{
           ...state,
         }
@@ -54,146 +56,83 @@ function Reducer(state: Object = defaultState, action: Object) {
           ...state
         }
 
-      case ActionConstants.USER_ADDED:
+//*********************************************************
+//****************** Bucket cases *************************
+//*********************************************************
+      case ActionConstants.BUCKET_RENAMED:
         return{
           ...state,
-          allUsersInfo: action.info
+          bucketInfo: action.info
         }
 
-      case ActionConstants.ALL_USER_MEALS_LOADED:
+      case ActionConstants.BUCKETS_LEFT_MERGED:
         return{
           ...state,
-          userInfo: action.info
+          allBucketsInfo: action.info
         }
 
-      case ActionConstants.USER_MEAL_DELETED:
+      case ActionConstants.BUCKETS_RIGHT_MERGED:
         return{
           ...state,
-          userInfo: action.info
+          allBucketsInfo: action.info
         }
 
-      case ActionConstants.DPLAN_EDITED:
+      case ActionConstants.BUCKET_ADDED:
         return{
           ...state,
-          userInfo: action.info
+          allBucketsInfo: action.info
         }
 
-      case ActionConstants.SPEND_GOAL_ADDED:
+      case ActionConstants.BUCKETS_MERGED_AND_CREATE_NEW:
         return{
           ...state,
-          userInfo: action.info
+          allBucketsInfo: action.info
         }
 
-      case ActionConstants.ALL_SPEND_GOALS_LOADED:
+      case ActionConstants.BUCKET_BY_CATAGORY_DELETED:
         return{
           ...state,
-          userInfo: action.info
+          allBucketsInfo: action.info
         }
 
-      case ActionConstants.NUTRI_GOAL_LOADED:
+      case ActionConstants.BUCKET_BY_CATAGORY_LOADED:
         return{
           ...state,
-          userInfo: action.info
+          bucketInfo: action.info
         }
 
-      case ActionConstants.ALL_NUTRI_GOALS_LOADED:
+      case ActionConstants.BUCKET_BY_ANNOTATION_LOADED:
         return{
           ...state,
-          userInfo: action.info
+          bucketInfo: action.info
         }
 
-      case ActionConstants.MEAL_LOADED:
+      case ActionConstants.ALL_BUCKETS_LOADED:
         return{
           ...state,
-          mealInfo: action.info
+          allBucketsInfo: action.info
         }
 
-      case ActionConstants.ALL_MEALS_LOADED:
-        return{
-          ...state,
-          allMeals: action.info
-        }
 
-      case ActionConstants.MEAL_EDITED:
-        return{
-          ...state,
-          mealInfo: action.info
-        }
+//*********************************************************
+//****************** Annotation cases *********************
+//*********************************************************
 
-      case ActionConstants.MEAL_DELETED:
+      case ActionConstants.ANNOTATION_BY_CATAGORY_DELETED:
         return{
           ...state
         }
 
-      case ActionConstants.MEAL_ADDED:
+      case ActionConstants.ANNOTATION_BY_CATAGORY_ADDED:
         return{
           ...state,
-          allMeals: action.info
+          allAnnotationsInfo: action.info
         }
 
-      case ActionConstants.ALL_MEALS_BY_RESTAURANT_LOADED:
+      case ActionConstants.ALL_ANNOTATIONS_BY_BUCKET_LOADED:
         return{
           ...state,
-          allMeals: action.info
-        }
-
-      case ActionConstants.MEALS_RESET:
-        return{
-          ...state,
-          allMeals: action.info
-        }
-
-      case ActionConstants.RESTAURANT_LOADED:
-        return{
-          ...state,
-          restaurantInfo: action.info
-        }
-
-      case ActionConstants.ALL_RESTAURANTS_LOADED:
-        return{
-          ...state,
-          allRestaurants: action.info
-        }
-
-      case ActionConstants.RESTAURANT_EDITED:
-        return{
-          ...state,
-          restaurantInfo: action.info
-        }
-
-      case ActionConstants.RESTAURANT_DELETED:
-        return{
-          ...state
-        }
-
-      case ActionConstants.RESTAURANT_ADDED:
-        return{
-          ...state,
-          allRestaurantsInfo: action.info
-        }
-
-      case ActionConstants.REVIEW_ADDED:
-        return{
-          ...state,
-          allReviews: action.info
-        }
-
-      case ActionConstants.ALL_REVIEWS_LOADED:
-        return{
-          ...state,
-          allReviews: action.info
-        }
-
-      case ActionConstants.REVIEW_BY_REVIEW_LOADED:
-        return{
-          ...state,
-          reviewInfo: action.info
-        }
-
-      case ActionConstants.REVIEW_BY_RESTAURANT_LOADED:
-        return{
-          ...state,
-          reviewInfo: action.info
+          allAnnotationsInfo: action.info
         }
 
       default:
