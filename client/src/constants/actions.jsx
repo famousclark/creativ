@@ -20,8 +20,18 @@ export const USER_DELETED: String = 'USER_DELETED';
 export const USER_SIGN_IN: String = 'USER_SIGN_IN';
 export const USER_SIGNED_IN: String = 'USER_SIGNED_IN';
 
+export const USER_SIGN_OUT: String = 'USER_SIGN_OUT';
+export const USER_SIGNED_OUT: String = 'USER_SIGNED_OUT';
+export const USER_TO_BE_SIGNED_OUT: String = 'USER_TO_BE_SIGNED_OUT';
+
 export const USER_REGISTER: String = 'USER_REGISTER';
 export const USER_REGISTERED: String = 'USER_REGISTERED';
+
+export const USER_AUTHORIZE_FLOW: String = 'USER_AUTHORIZE_FLOW';
+export const USER_TO_REAUTHORIZE: String = 'USER_TO_REAUTHORIZE';
+export const USER_REAUTHORIZED: String = 'USER_REAUTHORIZED';
+
+
 
 //*********************************************************
 //****************** Bucket cases *************************

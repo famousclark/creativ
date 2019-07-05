@@ -5,6 +5,9 @@ import ReactDOM from 'react-dom';
 // Containers
 import Root from './containers/Root';
 
+import { PersistGate } from 'redux-persist/integration/react'
+import { loadState, saveState } from './store/LocalStorage';
+
 // Redux
 import {Provider} from 'react-redux';
 import {configureStore, sagaMiddleware} from './store/Configure';
@@ -12,12 +15,12 @@ import {configureStore, sagaMiddleware} from './store/Configure';
 // Sagas
 import rootSaga from './middleware/Saga';
 
-const store = configureStore();
+const {store, persistor} = configureStore();
 
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
-  <Root store={store}/>,
+  <Root store={store} persistor={persistor}/>,
   document.getElementById('root')
 );
 

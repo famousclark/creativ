@@ -6,7 +6,9 @@ import * as ActionConstants from '../constants/actions';
 
 const defaultState = {
 
-  userInfo: {},
+  userInfo: {auth:false, authToExpire:false, accessToken: null},
+  userProfile:{},
+
   allUsersInfo: [],
 
   bucketInfo: {},
@@ -28,16 +30,36 @@ function Reducer(state: Object = defaultState, action: Object) {
           ...state,
         }
 
+      case ActionConstants.USER_REAUTHORIZED:
+        return{
+          ...state,
+          userInfo: action.info
+        }
+
       case ActionConstants.USER_SIGNED_IN:
         return{
           ...state,
           userInfo: action.info
         }
 
-      case ActionConstants.USER_PROFILE_LOADED:
+      case ActionConstants.USER_SIGNED_OUT:
         return{
           ...state,
           userInfo: action.info
+        }
+
+      case ActionConstants.USER_TO_BE_SIGNED_OUT:
+        return{
+          ...state,
+          userInfo: action.info
+          }
+
+      case ActionConstants.USER_PROFILE_LOADED:
+        return{
+          ...state,
+          userProfile: action.info,
+          allBucketsInfo: action.info.user.ownedBuckets
+
         }
 
       case ActionConstants.ALL_USERS_LOADED:

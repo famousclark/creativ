@@ -1,6 +1,9 @@
 /*============USER endpoints=============*/
-export const REGISTER_USER_ENDPOINT: string ='http://localhost:5000/api/users/registerUser/';
+export const REGISTER_USER_ENDPOINT: string ='http://localhost:3001/api/users/registerUser/';
 export const SIGN_IN_USER_ENDPOINT: string ='http://localhost:3001/api/users/signInUser/';
+
+export const AUTHORIZE_USER_ENDPOINT: string ='http://localhost:3001/api/users/authorizeUser';
+export const AUTHORIZE_EX_ENDPOINT: string ='http://localhost:3001/api/users/authorizeEx';
 
 export const UPDATE_USER_ENDPOINT: string =  'http://localhost:3001/api/users/updateUser/';
 

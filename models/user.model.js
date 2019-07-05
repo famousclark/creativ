@@ -31,9 +31,7 @@ const userSchema = new mongoose.Schema({
 
 	roles: [{ type: Schema.Types.ObjectId, ref: 'Role' }],
 
-	profile:{
-		ownedBuckets: [{ type : Schema.Types.ObjectId, ref: 'Bucket'}]
-	}
+	ownedBuckets: [{ type : Schema.Types.ObjectId, ref: 'Bucket'}]
 });
 
 

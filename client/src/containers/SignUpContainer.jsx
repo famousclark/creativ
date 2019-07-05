@@ -45,11 +45,11 @@ const useStyles = theme => ({
   }
 });
 
-class LoginContainer extends Component {
+class SignUpContainer extends Component {
 
   constructor(props : Object) {
     super(props);
-    (this : any).handleSignInUser = this.handleSignInUser.bind(this);
+    (this : any).handleRegisterUser = this.handleRegisterUser.bind(this);
     (this : any).handleEmailChange = this.handleEmailChange.bind(this);
     (this : any).handlePasswordChange = this.handlePasswordChange.bind(this);
     (this : any).MadeWithLove = this.MadeWithLove.bind(this);
@@ -58,8 +58,9 @@ class LoginContainer extends Component {
       allBucketsInfo: [],
       allAnnotationsInfo: [],
 
-      loginEmail: "",
-      loginPassword: ""
+      registerName: "",
+      registerEmail: "",
+      registerPassword: ""
     };
   }
 
@@ -73,26 +74,32 @@ class LoginContainer extends Component {
     );
   }
 
-  handleSignInUser = () => {
-    this.props.signInUser({
-      email: this.state.loginEmail,
-      password: this.state.loginPassword
+  handleRegisterUser = () => {
+    this.props.registerUser({
+      email: this.state.registerEmail,
+      password: this.state.registerPassword,
+      roles: ['user'],
+      name: this.state.registerName
     });
   }
 
+  handleNameChange = (e) => {
+   this.setState({registerName: e.target.value});
+  }
+
   handleEmailChange = (e) => {
-   this.setState({loginEmail: e.target.value});
+   this.setState({registerEmail: e.target.value});
   }
 
   handlePasswordChange = (e) => {
-     this.setState({loginPassword: e.target.value});
+     this.setState({registerPassword: e.target.value});
   }
 
   render() {
     const {classes} = this.props;
 
     const CollisionLink = React.forwardRef((props, ref) => (
-      <RouterLink innerRef={ref} to="/signup" {...props} />
+      <RouterLink innerRef={ref} to="/" {...props} />
     ));
 
     return (
@@ -100,41 +107,58 @@ class LoginContainer extends Component {
         <CssBaseline />
 
           <div className={classes.paper}>
+
             <Avatar className={classes.avatar}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Sign up
             </Typography>
-
             <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="loginEmail"
-                label="Email Address"
-                name="loginEmail"
-                autoComplete="email"
-                autoFocus
-                onChange={this.handleEmailChange}/>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="name"
+                    name="name"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    autoFocus
+                    onChange={this.handleNameChange}/>
+                </Grid>
 
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="loginPassword"
-                label="loginPassword"
-                type="password"
-                id="loginPassword"
-                autoComplete="current-password"
-                onChange={this.handlePasswordChange}/>
-
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"/>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="registerEmail"
+                    label="Email Address"
+                    name="registerEmail"
+                    autoComplete="email"
+                    onChange={this.handleEmailChange}/>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="registerPassword"
+                    label="Password"
+                    type="password"
+                    id="registerPassword"
+                    autoComplete="current-password"
+                    onChange={this.handlePasswordChange}/>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={<Checkbox value="allowExtraEmails" color="primary" />}
+                    label="I want to receive inspiration, marketing promotions and updates via email."
+                  />
+                </Grid>
+              </Grid>
               <Button
                 type="submit"
                 fullWidth
@@ -142,21 +166,22 @@ class LoginContainer extends Component {
                 color="primary"
                 onClick={(e) => {
                   e.preventDefault();
-                  this.handleSignInUser();
+                  this.handleRegisterUser();
                 }}
                 className={classes.submit}>
-                Sign In
+                Sign Up
               </Button>
-
               <Grid container justify="flex-end">
                 <Grid item>
                   <Link component={CollisionLink} >
-                    {"Don't have an account? Sign Up"}
+                    {"Already have an account? Sign in"}
                   </Link>
                 </Grid>
               </Grid>
             </form>
           </div>
+
+
         <Box mt={5}>
           {this.MadeWithLove()}
         </Box>
@@ -178,4 +203,4 @@ function mapActionCreatorsToProps(dispatch : Object) {
 
 // const mapStateToProps = (result) => ({result});
 
-export default connect(mapStateToProps, mapActionCreatorsToProps)(withStyles(useStyles)(LoginContainer));
+export default connect(mapStateToProps, mapActionCreatorsToProps)(withStyles(useStyles)(SignUpContainer));

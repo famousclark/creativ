@@ -7,6 +7,8 @@ import {
   DELETE_USER,
   USER_REGISTER,
   USER_SIGN_IN,
+  USER_SIGN_OUT,
+  USER_AUTHORIZE_FLOW,
 
   RENAME_BUCKET,
   LEFT_MERGE_BUCKETS,
@@ -30,30 +32,26 @@ import {
 
 export const getUserProfile = (token: String): Object => {
   return {
-    type: GET_USER_PROFILE,
-    token: token
+    type: GET_USER_PROFILE
   };
 };
 
 export const getAllUsers = (token: String): Object => {
   return {
-    type: GET_ALL_USERS,
-    token: token
+    type: GET_ALL_USERS
   };
 };
 
 export const updateUser = (userData: Object, token: String): Object => {
   return {
     type: UPDATE_USER,
-    userData: userData,
-    token: token
+    userData: userData
   };
 };
 
 export const deleteUser = (token: String): Object => {
   return {
     type: DELETE_USER,
-    token: token
   };
 };
 
@@ -64,10 +62,22 @@ export const registerUser = (userData: Object): Object => {
   };
 };
 
-export const signInUser= (userData: Object): Object => {
+export const signInUser = (userData: Object): Object => {
   return {
     type: USER_SIGN_IN,
     userData: userData
+  };
+};
+
+export const signOutUser = (): Object => {
+  return {
+    type: USER_SIGN_OUT
+  };
+};
+
+export const authorizeFlow = (): Object => {
+  return {
+    type: USER_AUTHORIZE_FLOW,
   };
 };
 
@@ -78,68 +88,61 @@ export const signInUser= (userData: Object): Object => {
 export const renameBucket = (userData: Object, token: String): Object => {
   return {
     type: RENAME_BUCKET,
-    userData: userData,
-    token: token
+    userData: userData
   };
 };
 
 export const leftMergeBuckets = (userData: Object, token: String): Object => {
   return {
     type: LEFT_MERGE_BUCKETS,
-    userData: userData,
-    token: token
+    userData: userData
   };
 };
 
 export const rightMergeBuckets = (userData: Object, token: String): Object => {
   return {
     type: RIGHT_MERGE_BUCKETS,
-    userData: userData,
-    token: token
+    userData: userData
   };
 };
 
 export const addBucket = (userData: Object, token: String): Object => {
   return {
     type: ADD_BUCKET,
-    userData: userData,
-    token: token
+    userData: userData
   };
 };
 
 export const mergeAndCreateNewBucket = (userData: Object, token: String): Object => {
   return {
     type: MERGE_AND_CREATE_NEW_BUCKET,
-    userData: userData,
-    token: token
+    userData: userData
   };
 };
 
 export const deleteBucketByCatagory = (token: String): Object => {
   return {
-    type: DELETE_BUCKET_BY_CATAGORY,
-    token: token
+    type: DELETE_BUCKET_BY_CATAGORY
   };
 };
 
 export const getBucketByAnnotation = (token: String): Object => {
   return {
     type: GET_BUCKET_BY_ANNOTATION,
-    token: token
   };
 };
 
 export const getBucketByCatagory = (token: String): Object => {
   return {
     type: GET_BUCKET_BY_CATAGORY,
-    token: token
+
   };
 };
 
 export const getAllBuckets = (token: String): Object => {
   return {
     type: GET_ALL_BUCKETS,
-    token: token
+
   };
 };
 
@@ -150,20 +153,20 @@ export const getAllBuckets = (token: String): Object => {
 export const deleteAnnotationByCatagory = (token: String): Object => {
   return {
     type: DELETE_ANNOTATION_BY_CATAGORY,
-    token: token
+
   };
 };
 
 export const addAnnotationByCatagory = (token: String): Object => {
   return {
     type: ADD_ANNOTATION_BY_CATAGORY,
-    token: token
+
   };
 };
 
 export const getAllAnnotationsByBucket = (token: String): Object => {
   return {
     type: GET_ALL_ANNOTATIONS_BY_BUCKET,
-    token: token
+
   };
 };

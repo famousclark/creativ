@@ -1,33 +1,56 @@
 // Redux Saga
-import { put, takeEvery, take, call, all } from "redux-saga/effects";
+import { put, takeEvery, take, call, all, race } from "redux-saga/effects";
+
+import history from "../utils/history";
 
 import { eventChannel, END } from "redux-saga";
+
+import decode from "jwt-decode";
 
 import React from "react";
 
 import BackendFactory from "./Backends/BackendFactory";
+
+import * as Api from "./SagaApi";
 
 // Action Constants
 import * as ActionConstants from "../constants/actions";
 
 const backend = BackendFactory();
 
-const sleep = (duration: Number): Promise => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), duration);
-  });
+function forwardTo(location) {
+  history.push(location);
+}
+
+function getAuthToken() {
+  return JSON.parse(localStorage.getItem('authToken'));
+}
+
+function decodeAuthToken(token){
+  console.log(token);
+  return Api.decode(token);
+}
+
+function setAuthToken(token) {
+  localStorage.setItem('authToken', JSON.stringify(token));
+}
+
+function removeAuthToken() {
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('state');
 }
 
 //*********************************************************
 //********************* User cases ************************
 //*********************************************************
 
-function* getUserProfileSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+function* getUserProfileSaga(): Generator<any, any, any> {
   try {
-    const loaded = yield backend.getUserProfile(userAction.userData, userAction.token);
+    const token = yield call(getAuthToken);
+    const loaded = yield call(Api.getUserProfile, token);
     //console.log(loaded);
     yield put({ type: ActionConstants.USER_PROFILE_LOADED, info: loaded });
+    yield call(getAllBucketsSaga);
     //yield sleep(5000);
   } catch (e) {
     console.log("error");
@@ -68,31 +91,136 @@ function* deleteUserSaga(userAction: Object): Generator<any, any, any> {
     yield put({ type: ActionConstants.USER_DELETED, info: added });
     //yield sleep(5000);
   } catch (e) {
-    console.log("error");
+    console.log(e);
   }
 }
 
 function* registerUserSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
   try {
-    const added = yield backend.registerUser(userAction.userData);
-    //console.log(loaded);
+    const {email, password} = userAction.userData;
+    const signInAction = {
+      userData:
+        {email: email, password: password}
+    };
+    console.log(userAction);
+    const added = yield call(Api.registerUser, userAction.userData);
     yield put({ type: ActionConstants.USER_REGISTERED, info: added });
+    yield call(signInUserSaga, signInAction);
     //yield sleep(5000);
   } catch (e) {
-    console.log("error");
+    console.log(e);
+    yield call(signoutSaga);
   }
 }
 
 function* signInUserSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
   try {
-    const added = yield backend.signInUser(userAction.userData);
-    //console.log(loaded);
+    //const added = yield call(backend.signInUser, userAction.userData);
+    const added = yield call(Api.signInUser, userAction.userData);
+    yield call(setAuthToken, added.accessToken);
     yield put({ type: ActionConstants.USER_SIGNED_IN, info: added });
-    //yield sleep(5000);
+    yield call(getUserProfileSaga);
+    yield call(forwardTo, "/dashboard");
+    yield call(authFlowSaga);
   } catch (e) {
-    console.log("error");
+    console.log(e);
+    yield call(signoutSaga);
+  }
+}
+
+function* authFlowSaga() {
+
+  try{
+    const token = yield call(getAuthToken);
+    const decoded = yield call(decodeAuthToken, token);
+
+    const {toExpire, toSignout} = yield race({
+      toExpire: call(Api.backGroundWait, (decoded.expires_In - 300)),
+      toSignout: take(ActionConstants.USER_SIGN_OUT)
+    });
+
+    if (toExpire) {
+      const {expired} = yield race({
+        expired: call(Api.backGroundWait, decoded.expires_In),
+        renewedAuth: call(renewAuthSaga)
+      })
+
+      if (expired) {
+        yield call(signoutSaga);
+      }else{
+        const authResult = yield call(authorizeSaga, token);
+        if (authResult) {
+          yield call(authFlowSaga);
+        }
+      }
+    }else{
+      yield call(signoutSaga);
+    }
+  }catch(e){
+    console.log(e);
+    yield call(signoutSaga);
+  }
+
+}
+
+function* renewAuthSaga(){
+  try{
+    const token = yield call(getAuthToken);
+    yield put({type: ActionConstants.USER_TO_BE_SIGNED_OUT, info: {auth: true, authToExpire: true, accessToken: token} });
+    yield take(ActionConstants.USER_TO_REAUTHORIZE);
+  }catch(e){
+    console.log(e);
+    yield call(signoutSaga);
+  }
+}
+
+// reusable subroutines. Avoid duplicating code inside the main Saga
+function* authorizeSaga(credentialsOrToken) {
+
+  try {
+    // call the remote authorization service
+    console.log(credentialsOrToken);
+    const {toResponse} = yield race({
+      toResponse: call(authService, credentialsOrToken),
+      toSignout : take(ActionConstants.USER_SIGN_OUT)
+    });
+
+    // server responded (with Success) before user signed out
+    if(toResponse.auth && toResponse.accessToken) {
+      console.log(toResponse);
+      yield call(setAuthToken, toResponse.accessToken); // save to local storage
+      yield put({type: ActionConstants.USER_REAUTHORIZED, info : toResponse});
+      return true;
+    }
+    // user signed out before server response OR server responded first but with error
+    else {
+      yield call(signoutSaga);
+      return false;
+    }
+  } catch (e) {
+    console.log(e);
+    yield call(signoutSaga);
+  }
+
+}
+
+function* authService(credentialsOrToken){
+  try {
+    const added = yield call(Api.authorizeUser, credentialsOrToken);
+    yield call(setAuthToken, added.accessToken);
+    return added;
+  } catch (e) {
+    console.log(e);
+    yield call(signoutSaga);
+  }
+}
+
+function* signoutSaga() {
+  try{
+    yield call(removeAuthToken); // remove the token from localStorage
+    yield put({type: ActionConstants.USER_SIGNED_OUT, info: {auth: false, authToExpire: false, accessToken: null}}); // notify th store
+  }catch (e){
+    console.log(e);
   }
 }
 
@@ -197,10 +325,11 @@ function* getBucketByAnnotationSaga(userAction: Object): Generator<any, any, any
   }
 }
 
-function* getAllBucketsSaga(userAction: Object): Generator<any, any, any> {
+function* getAllBucketsSaga(): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const loaded = yield backend.getAllBuckets(userAction.token);
+    const token = yield call(getAuthToken);
+    const loaded = yield call(Api.getAllBuckets, token);
     //console.log(loaded);
     yield put({ type: ActionConstants.ALL_BUCKETS_LOADED, info: loaded });
     //yield sleep(5000);
@@ -282,6 +411,14 @@ export function* watchForSignInUser(): Generator<any, any, any> {
   yield takeEvery(ActionConstants.USER_SIGN_IN, signInUserSaga);
 }
 
+export function* watchForSignOutUser(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.USER_SIGN_OUT, signoutSaga);
+}
+
+export function* watchForAuthorizeFlow(): Generator<any, any, any> {
+  yield takeEvery(ActionConstants.USER_AUTHORIZE_FLOW, authFlowSaga);
+}
+
 //*********************************************************
 //****************** Bucket cases *************************
 //*********************************************************
@@ -346,6 +483,8 @@ export default function* rootSaga(): Generator<any, any, any> {
     watchForDeleteUser(),
     watchForRegisterUser(),
     watchForSignInUser(),
+    watchForSignOutUser(),
+    watchForAuthorizeFlow(),
 
     watchForRenameBucket(),
     watchForLeftMergeBuckets(),

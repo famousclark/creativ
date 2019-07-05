@@ -6,6 +6,8 @@ const userController = require("../../controllers/user.controller");
 
 router
   .post("/registerUser",[verifySignUp.checkDuplicateUserNameOrEmail, verifySignUp.checkRolesExisted], userController.registerUser)
+  .post("/authorizeUser", [authJwt.verifyToken], userController.authorizeUser)
+  .post("/authorizeEx", [authJwt.verifyTokenExpiration], userController.authorizeEx)
   .post("/signInUser", userController.signInUser);
 
 router

@@ -19,7 +19,8 @@ exports.registerUser = (req, res, next) => {
     password: bcrypt.hashSync(req.body.password, 8)
   });
 
-  user.save().then(savedUser => {
+  user.save()
+  .then(savedUser => {
     Role.find({
       'name': { $in: req.body.roles.map(role => role.toUpperCase()) }}).then(roles => {
 
@@ -29,7 +30,7 @@ exports.registerUser = (req, res, next) => {
          if (err)
            res.status(500).send("Error -> " + err);
 
-         res.send("User registered successfully!");
+         res.status(200).send({response: "User registered successfully!"});
        });
     })
   }).catch(err => {
@@ -125,7 +126,8 @@ exports.adminBoard = (req, res) => {
 
 exports.findUserProfile = (req, res, next) => {
   User.findOne({ _id: req.userId })
-  .populate("roles")
+  .populate({path: 'roles', select: '_id name'})
+  .populate({path: 'ownedBuckets', select: '_id catagory'})
   .exec( (err, user) => {
     if (err){
       if(err.kind === 'ObjectId') {
@@ -143,6 +145,15 @@ exports.findUserProfile = (req, res, next) => {
       "user": user
     });
   });
+};
+
+exports.authorizeUser = (req, res, next) => {
+  const token = jwt.sign( { id: req.userId }, config.secret, {algorithm:'HS384', expiresIn: '15m' } );
+  res.status(200).send({ auth: true, authToExpire: false, accessToken: token });
+};
+
+exports.authorizeEx = (req, res, next) => {
+  res.status(200).send({ expires_In: req.expires_In });
 };
 
 exports.signInUser = (req, res, next) => {
@@ -163,14 +174,12 @@ exports.signInUser = (req, res, next) => {
 
     const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
     if (!passwordIsValid) {
-      return res.status(401).send({ auth: false, accessToken: null, reason: "Invalid Password!" });
+      return res.status(401).send({ auth: false, authToExpire: false, accessToken: null, reason: "Invalid Password!" });
     }
 
-    const token = jwt.sign({ id: user._id }, config.secret, {
-      expiresIn: 86400 // expires in 24 hours
-    });
+    const token = jwt.sign( { id: user._id }, config.secret, {algorithm:'HS384', expiresIn: '15m' } );
 
-    res.status(200).send({ auth: true, accessToken: token });
+    res.status(200).send({ auth: true, authToExpire: false, accessToken: token });
   });
 };
 

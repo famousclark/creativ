@@ -24,6 +24,27 @@ verifyToken = (req, res, next) => {
   });
 }
 
+verifyTokenExpiration = (req, res, next) => {
+  let token = req.headers['x-access-token'];
+
+  if (!token){
+    return res.status(403).send({
+      auth: false, message: 'No token provided.'
+    });
+  }
+
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err){
+      return res.status(500).send({
+          auth: false,
+          message: 'Fail to Authentication. Error -> ' + err
+        });
+    }
+    req.expires_In = decoded.exp;
+    next();
+  });
+}
+
 isAdmin = (req, res, next) => {
 
   User.findOne({ _id: req.userId })
@@ -99,6 +120,7 @@ const authJwt = {};
 authJwt.verifyToken = verifyToken;
 authJwt.isAdmin = isAdmin;
 authJwt.isPmOrAdmin = isPmOrAdmin;
+authJwt.verifyTokenExpiration = verifyTokenExpiration;
 
 module.exports = authJwt;
 
