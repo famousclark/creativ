@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import * as AppActions from "../constants/actions";
+import * as ActionCreators from '../actions/Actions';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -64,38 +64,76 @@ const useStyles = theme => ({
 
 class Content extends React.Component {
 
-  state = {
-    sortables: ["test test test test test test tets test tets test tets tte tst stts sttst", 'test', 'test'],
-    groupOne: [
-      'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry',
-      'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry',
-      'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry'
-    ],
-    groupTwo: ['cherry'],
-    groupThree: ['apple'],
-    groupFour: ['apple'],
-    groupFive: ['apple'],
-    groupSix: ['apple'],
-    groupSeven: ['apple'],
-    groupEight: ['apple'],
-    groupNine: ['apple'],
-    items: this.props.allBucketsInfo
-  };
+  constructor(props : Object) {
+    super(props);
+    (this : any).handleAutoSave = this.handleAutoSave.bind(this);
+    (this : any).handleOnChangeSortable = this.handleOnChangeSortable.bind(this);
+
+
+    (this : any).state = {
+      sortables: ["test test test test test test tets test tets test tets tte tst stts sttst", 'test', 'test'],
+      groupOne: [
+        'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry',
+        'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry',
+        'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry'
+      ],
+      groupTwo: ['cherry'],
+      groupThree: ['apple'],
+      groupFour: ['apple'],
+      groupFive: ['apple'],
+      groupSix: ['apple'],
+      groupSeven: ['apple'],
+      groupEight: ['apple'],
+      groupNine: ['apple'],
+
+      allBuckets: {},
+      toAutoSave: []
+    };
+  }
 
   componentDidMount = () => {
-    console.log(this.state);
+    console.log(this.props);
+    const allBucketsProps = this.props.allBucketsInfo;
+    this.setState({allBuckets: allBucketsProps}, () => console.log(this.state));
+
+  }
+
+  handleAutoSave = async () => {
+    await this.props.autoSaveUserContent(this.state.toAutoSave);
+  }
+
+  handleOnChangeSortable = (sortableItem) => {
+    this.props.addAnnotationByCatagory(sortableItem);
+    /*
+    let currentState = this.state.toAutoSave;
+
+    for (var catagory of currentState) {
+      if (catagory._id === catagoryID) {
+        catagory.sortables.push(sortableItem);
+        this.setState({toAutoSave: currentState});
+        return;
+      }
+    }
+
+    let newCatagoryToAutoSave = {"_id": catagoryID, "catagory": catagoryName, "sortables": sortableItem};
+    currentState.push(newCatagoryToAutoSave);
+    console.log(currentState);
+    this.setState({toAutoSave: currentState}, () => console.log(this.state));
+    */
   }
 
   render() {
 
+    const entries = Object.entries(this.state.allBuckets);
+    console.log(entries);
     const sortables = this.state.sortables.map(val => (<ListItem key={uniqueId()} data-id={val}>{val}</ListItem>));
 
     const {classes} = this.props
     const indexs = ['groupOne', 'groupTwo', 'groupThree', 'groupFour', 'groupFive', 'groupSix', 'groupSeven', 'groupEight', 'groupNine'];
 
-    const list = this.props.allBucketsInfo.buckets.map(name =>
-      <Paper key={name.catagory} className={classes.sortableMargin}>
-        <ListSubheader>{name.catagory}</ListSubheader>
+    const list = entries.map(obj =>
+      <Paper key={obj[1].catagory} className={classes.sortableMargin}>
+        <ListSubheader>{obj[1].catagory}</ListSubheader>
         <Sortable
           component={List}
           options={{
@@ -103,10 +141,25 @@ class Content extends React.Component {
             pull: true,
             put: true
           }}
-          onChange={(items) => {
-            this.setState({ [name]: items });
+          onChange={ (items, sortable, evt) => {
+            //console.log(`${obj[1].catagory}: [${items}]`);
+            //const catagory = obj[1]._id;
+            this.handleOnChangeSortable(items);
+            /*
+            this.setState(prevState => ({
+              //console.log(catagory);
+              allBuckets:{
+                ...prevState.allBuckets,
+                [catagory]:{
+                  ...prevState.allBuckets[catagory],
+                  sortables: items
+                }
+              }
+            }), () => console.log(this.state.allBuckets[catagory]));
+            */
           }}>
-          {name.sortables.map(val => (<ListItem key={uniqueId()} data-id={val.annotation}>{val.annotation}</ListItem>))}
+
+          {obj[1].sortables.map(val => (<ListItem key={uniqueId()} data-id={val}>{val}</ListItem>))}
         </Sortable>
       </Paper>
     );
@@ -124,6 +177,7 @@ class Content extends React.Component {
                   put: false
               }}
               onChange={(items) => {
+                console.log(`sortables: [${items}]`);
                 this.setState({ sortables: items });
               }}>
               {sortables}
@@ -147,7 +201,7 @@ function mapStateToProps(state, ownProps): Object {
 }
 
 function mapActionCreatorsToProps(dispatch) {
-  return bindActionCreators(AppActions, dispatch);
+  return bindActionCreators(ActionCreators, dispatch);
 }
 
 export default connect(mapStateToProps, mapActionCreatorsToProps)(withStyles(useStyles)(Content));

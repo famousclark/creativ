@@ -33,5 +33,7 @@ export const DELETE_ANNOTATION_BY_CATAGORY_ENDPOINT: string =  'http://localhost
 
 export const ADD_ANNOTATION_BY_CATAGORY_ENDPOINT: string =  'http://localhost:3001/api/buckets/addAnnotationByCatagory/';
 
+export const UPDATE_BUCKET_ON_CHANGE_ENDPOINT: string =  'http://localhost:3001/api/buckets/updateBucketOnChange/';
+
 export const GET_ALL_ANNOTATIONS_BY_BUCKET_ENDPOINT: string ='http://localhost:3001/api/buckets/findAllAnnotationsByBucket/';
 /*============ANNOTATION endpoints=============*/

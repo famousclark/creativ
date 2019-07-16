@@ -7,7 +7,7 @@ exports.addBucket = (req, res, next) => {
   console.log(req.body);
 
   const bucketId = new mongoose.Types.ObjectId();
-  const emptyAnnotationId = new mongoose.Types.ObjectId();
+  //const emptyAnnotationId = new mongoose.Types.ObjectId();
 
   const query = {"_id" : req.userId};
   const update =
@@ -20,8 +20,8 @@ exports.addBucket = (req, res, next) => {
     _id: bucketId,
     owner: req.userId,
     catagory: req.body.catagory,
-    sortables: [emptyAnnotationId],
-    numOfSortables : 1
+    sortables: [req.body.annotation],
+    //sortables: [emptyAnnotationId],
   });
 
   User.findOneAndUpdate(query, update, options)
@@ -44,7 +44,7 @@ exports.addBucket = (req, res, next) => {
 
     bucket.save((err, bucket) => {
       if (err) return res.status(500).json(err);
-
+      /*
       const emptyAnnotation = new Annotation({
         _id: emptyAnnotationId,
         classification : bucketId,
@@ -55,22 +55,87 @@ exports.addBucket = (req, res, next) => {
       emptyAnnotation.save( (err) => {
         if(err) return res.status(500).json(err);
       });
-
-      res.status(200).json({bucket, emptyAnnotation});
+      */
+      res.status(200).json({bucket});
     });
 
   });
 }
 
-exports.addAnnotationByCatagory = (req, res, next) => {
+exports.autoSave = (req, res, next) => {
   console.log(req.body);
 
-  const annotationId = new mongoose.Types.ObjectId();
+  const bucketsToUpdate = req.body.bucketsToUpdate;
+  //console.log(bucketsToUpdate);
+  let updatedBuckets = [];
+  for (var bucket of bucketsToUpdate) {
+
+    //console.log(bucket);
+    let annotationIDs = [];
+    let annotationDocs = [];
+
+    for (var annotation of bucket.sortables) {
+      //let ID = new mongoose.Types.ObjectId();
+
+      //annotationIDs.push(ID);
+      annotationDocs.push(annotation);
+      /*
+      annotationDocs.push(new Annotation({
+        _id: ID,
+        owner: req.userId,
+        classification: bucket._id,
+        annotation: annotation
+      }));
+      */
+    }
+
+    let query = { "$and": [{"owner" : req.userId}, {"_id" : bucket._id} ] };
+    let update =
+    {
+        "$set" : { "sortables" :annotationDocs  }
+        //"$addToSet" : { "sortables" : {"$each":  annotationDocs } }
+        //"$addToSet" : { "sortables" : {"$each":  annotationIDs } }
+    };
+    let options = {new: true};
+
+    Bucket.findOneAndUpdate(query, update, options)
+    .exec( (err, updatedDoc) => {
+      if (err){
+
+        if(err.kind === 'ObjectId') {
+          return res.status(404).json({
+            message: "Bucket not found with _id = " + req.userId
+          });
+        }
+
+        return res.status(500).json({
+          "description": "Can not access Buckets",
+          "error": err
+        });
+
+      }
+      console.log(updatedDoc);
+      updatedBuckets.push(updatedDoc);
+      console.log(updatedBuckets);
+      //Annotation.insertMany(annotationDocs);
+
+    });
+    //console.log(bucketsToUpdate[bucket]);
+
+  }
+  return res.status(200).json({message: "auto save complete"});
+
+}
+
+exports.updateBucketOnChange = (req, res, next) => {
+  console.log(req.body);
+
+  //const annotationId = new mongoose.Types.ObjectId();
   const query = { "$and": [{"owner" : req.userId}, {"catagory" : req.body.catagory} ] };
   const update =
   {
-      "$inc" : { "numOfSortables" : 1 },
-      "$addToSet" : { "sortables" : annotationId }
+      "$set" : { "sortables" : req.body.sortables }
+      //"$addToSet" : { "sortables" : annotationId }
   };
   const options = {new: true};
 
@@ -78,20 +143,50 @@ exports.addAnnotationByCatagory = (req, res, next) => {
   .exec( (err, updatedDoc) => {
     if (err){
       if(err.kind === 'ObjectId') {
-        res.status(404).json({
+        return res.status(404).json({
           message: "User not found with _id = " + req.userId
         });
-        return;
       }
 
-      res.status(500).json({
+      return res.status(500).json({
         "description": "Can not access Admin Board",
         "error": err
       });
 
-      return;
     }
+    return res.status(200).json(updatedDoc);
+  });
 
+}
+
+exports.addAnnotationByCatagory = (req, res, next) => {
+  console.log(req.body);
+
+  //const annotationId = new mongoose.Types.ObjectId();
+  const query = { "$and": [{"owner" : req.userId}, {"catagory" : req.body.catagory} ] };
+  const update =
+  {
+      "$addToSet" : { "sortables" : {"$each":  req.body.annotation } }
+      //"$addToSet" : { "sortables" : annotationId }
+  };
+  const options = {new: true};
+
+  Bucket.findOneAndUpdate(query, update, options)
+  .exec( (err, updatedDoc) => {
+    if (err){
+      if(err.kind === 'ObjectId') {
+        return res.status(404).json({
+          message: "User not found with _id = " + req.userId
+        });
+      }
+
+      return res.status(500).json({
+        "description": "Can not access Admin Board",
+        "error": err
+      });
+
+    }
+    /*
     const annotation = new Annotation({
       _id: annotationId,
       owner: updateDoc.owner,
@@ -102,7 +197,7 @@ exports.addAnnotationByCatagory = (req, res, next) => {
     annotation.save( (err) => {
       if(err) return res.status(500).json(err);
     });
-
+    */
     return res.status(200).json(updatedDoc);
   });
 
@@ -119,7 +214,6 @@ exports.mergeAndCreateNewBucket = (req, res, next) => {
     catagory : req.body.catagory,
     sortables: [],
     joinedCatagories: [req.body.leftJoin, req.body.rightJoin],
-    numOfSortables : 0
   });
 
 
@@ -158,7 +252,7 @@ exports.findAllAnnotationsByBucket = (req, res, next) => {
   const query = { "$and": [ {"owner" : req.userId} , {"_id" : req.body._id} ] };
 
   Bucket.find(query)
-  .populate('sortables')
+  //.populate('sortables')
   .exec( (err, buckets) => {
     if(err){
       if(err.kind === 'ObjectId') {
@@ -190,7 +284,7 @@ exports.findBucketByCatagory = (req, res, next) => {
 
 exports.findAllBuckets = (req, res, next) => {
   Bucket.find({owner: req.userId})
-  .populate({path: 'sortables', select: '_id annotation'})
+  //.populate({path: 'sortables', select: '_id annotation'})
   .populate({path: 'joinedCatagories', select: '_id catagory'})
   .sort({'numOfSortables' : 1})
   .exec( (err, buckets) => {
@@ -285,11 +379,11 @@ exports.renameBucket = (req, res, next) => {
 
 exports.deleteAnnotationByCatagory = (req, res, next) => {
   console.log(req.body);
-
-  const query = {"$and":  [ {"owner" : req.userId}, {"sortables"  : { "$in" : [req.body._id] } } ] } ;
+  const query = {"$and": [{"owner" : req.userId}, {"catagory" : req.body.catagory}] };
+  //const query = {"$and":  [ {"owner" : req.userId}, {"sortables"  : { "$in" : [req.body._id] } } ] } ;
   const update =
   {
-      "$inc" : { "numOfSortables" : -1 }
+      "$pull" : {"sortables": req.body.annotation},
   };
   const options = {new: true};
 
@@ -304,27 +398,28 @@ exports.deleteAnnotationByCatagory = (req, res, next) => {
       return res.status(500).json({
         message: "Error updating Buckets with _id = " + req.userId
       });
-
-      Annotation.deleteOne({ _id: req.body._id })
-      .exec( (err, response) => {
-        if(err){
-          if(err.kind === 'ObjectId') {
-            return res.status(404).json({
-              message: "Annotations not found with _id = " + req.userId
-            });
-          }
-          return res.status(500).json({
-            message: "Error deleting Annotations with _id = " + req.userId
-          });
-        }
-
-        if (response.deletedCount <= 0) {
-          return res.status(404).json({
-            message: "Error deleting Annotations with _id = " + req.userId
-          });
-        }
-      });
     }
+    /*
+    Annotation.deleteOne({ _id: req.body._id })
+    .exec( (err, response) => {
+      if(err){
+        if(err.kind === 'ObjectId') {
+          return res.status(404).json({
+            message: "Annotations not found with _id = " + req.userId
+          });
+        }
+        return res.status(500).json({
+          message: "Error deleting Annotations with _id = " + req.userId
+        });
+      }
+
+      if (response.deletedCount <= 0) {
+        return res.status(404).json({
+          message: "Error deleting Annotations with _id = " + req.userId
+        });
+      }
+    });
+    */
     return res.status(200).json(updatedDoc);
   });
 }
@@ -352,7 +447,7 @@ exports.deleteBucketByCatagory = (req, res ,next) => {
         message: "Error deleting Annotations with _id = " + req.userId
       });
     }
-
+    /*
     Annotation.deleteMany({ classification: req.body._id })
     .exec( (err, response) => {
       if(err){
@@ -372,7 +467,7 @@ exports.deleteBucketByCatagory = (req, res ,next) => {
         });
       }
     });
-
+    */
     return res.status(200).json({message: `succesfully deleted `});
   });
 }

@@ -22,6 +22,14 @@ function forwardTo(location) {
   history.push(location);
 }
 
+function arrayToObject (array) {
+
+  return array.reduce((obj, item) => {
+     obj[item._id] = item
+     return obj
+   }, {});
+}
+
 function getAuthToken() {
   return JSON.parse(localStorage.getItem('authToken'));
 }
@@ -330,11 +338,13 @@ function* getAllBucketsSaga(): Generator<any, any, any> {
   try {
     const token = yield call(getAuthToken);
     const loaded = yield call(Api.getAllBuckets, token);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.ALL_BUCKETS_LOADED, info: loaded });
+    console.log(loaded);
+    const loadedObj = yield call(arrayToObject, loaded.buckets);
+    console.log(loadedObj);
+    yield put({ type: ActionConstants.ALL_BUCKETS_LOADED, info: loadedObj });
     //yield sleep(5000);
   } catch (e) {
-    console.log("error");
+    console.log(e);
   }
 }
 
@@ -359,12 +369,13 @@ function* deleteAnnotationByCatagorySaga(userAction: Object): Generator<any, any
 function* addAnnotationByCatagorySaga(userAction: Object): Generator<any, any, any> {
   console.log("this fired");
   try {
-    const added = yield backend.addAnnotationByCatagory(userAction.userData, userAction.token);
-    //console.log(loaded);
-    yield put({ type: ActionConstants.ANNOTATION_BY_CATAGORY_ADDED, info: added });
+    const token = yield call(getAuthToken);
+    const updated = yield call(Api.updateBucket, [userAction.userData, token]);
+    yield put({ type: ActionConstants.ANNOTATION_BY_CATAGORY_ADDED, info: updated });
+    yield call(getAllBucketsSaga);
     //yield sleep(5000);
   } catch (e) {
-    console.log("error");
+    console.log(e);
   }
 }
 

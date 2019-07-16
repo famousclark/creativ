@@ -8,6 +8,8 @@ router
   .post('/mergeAndCreateNewBucket', [authJwt.verifyToken], bucketController.mergeAndCreateNewBucket);
 
 router
+  .put('/updateBucketOnChange', [authJwt.verifyToken], bucketController.updateBucketOnChange)
+  .put('/autoSave', [authJwt.verifyToken], bucketController.autoSave)
   .put('/renameBucket', [authJwt.verifyToken], bucketController.renameBucket)
   .put('/leftMergeBuckets', [authJwt.verifyToken], bucketController.leftMergeBuckets)
   .put('/rightMergeBuckets', [authJwt.verifyToken], bucketController.rightMergeBuckets)

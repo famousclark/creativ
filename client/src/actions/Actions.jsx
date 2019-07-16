@@ -42,7 +42,7 @@ export const getAllUsers = (token: String): Object => {
   };
 };
 
-export const updateUser = (userData: Object, token: String): Object => {
+export const updateUser = (userData: Object): Object => {
   return {
     type: UPDATE_USER,
     userData: userData
@@ -85,61 +85,61 @@ export const authorizeFlow = (): Object => {
 //****************** Bucket cases *************************
 //*********************************************************
 
-export const renameBucket = (userData: Object, token: String): Object => {
+export const renameBucket = (userData: Object): Object => {
   return {
     type: RENAME_BUCKET,
     userData: userData
   };
 };
 
-export const leftMergeBuckets = (userData: Object, token: String): Object => {
+export const leftMergeBuckets = (userData: Object): Object => {
   return {
     type: LEFT_MERGE_BUCKETS,
     userData: userData
   };
 };
 
-export const rightMergeBuckets = (userData: Object, token: String): Object => {
+export const rightMergeBuckets = (userData: Object): Object => {
   return {
     type: RIGHT_MERGE_BUCKETS,
     userData: userData
   };
 };
 
-export const addBucket = (userData: Object, token: String): Object => {
+export const addBucket = (userData: Object ): Object => {
   return {
     type: ADD_BUCKET,
     userData: userData
   };
 };
 
-export const mergeAndCreateNewBucket = (userData: Object, token: String): Object => {
+export const mergeAndCreateNewBucket = (userData: Object ): Object => {
   return {
     type: MERGE_AND_CREATE_NEW_BUCKET,
     userData: userData
   };
 };
 
-export const deleteBucketByCatagory = (token: String): Object => {
+export const deleteBucketByCatagory = (): Object => {
   return {
     type: DELETE_BUCKET_BY_CATAGORY
   };
 };
 
-export const getBucketByAnnotation = (token: String): Object => {
+export const getBucketByAnnotation = (): Object => {
   return {
     type: GET_BUCKET_BY_ANNOTATION,
   };
 };
 
-export const getBucketByCatagory = (token: String): Object => {
+export const getBucketByCatagory = (): Object => {
   return {
     type: GET_BUCKET_BY_CATAGORY,
 
   };
 };
 
-export const getAllBuckets = (token: String): Object => {
+export const getAllBuckets = (): Object => {
   return {
     type: GET_ALL_BUCKETS,
 
@@ -150,21 +150,21 @@ export const getAllBuckets = (token: String): Object => {
 //****************** Annotation cases *************************
 //*********************************************************
 
-export const deleteAnnotationByCatagory = (token: String): Object => {
+export const deleteAnnotationByCatagory = (): Object => {
   return {
     type: DELETE_ANNOTATION_BY_CATAGORY,
 
   };
 };
 
-export const addAnnotationByCatagory = (token: String): Object => {
+export const addAnnotationByCatagory = (userData: Object): Object => {
   return {
     type: ADD_ANNOTATION_BY_CATAGORY,
-
+    userData: userData
   };
 };
 
-export const getAllAnnotationsByBucket = (token: String): Object => {
+export const getAllAnnotationsByBucket = (): Object => {
   return {
     type: GET_ALL_ANNOTATIONS_BY_BUCKET,
 

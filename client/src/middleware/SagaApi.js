@@ -20,6 +20,7 @@ import {
 
   DELETE_ANNOTATION_BY_CATAGORY_ENDPOINT,
   ADD_ANNOTATION_BY_CATAGORY_ENDPOINT,
+  UPDATE_BUCKET_ON_CHANGE_ENDPOINT,
   GET_ALL_ANNOTATIONS_BY_BUCKET_ENDPOINT
 
 } from "../constants/api-endpoints";
@@ -151,4 +152,23 @@ export const getAllBuckets = async (body) => {
     console.log(e);
   }
 }
+
+export const updateBucket = async (body) => {
+  console.log(body);
+  try {
+    const data = await JSON.stringify(body[0]);
+    const response = await fetch(UPDATE_BUCKET_ON_CHANGE_ENDPOINT , {
+      headers: {
+        'x-access-token': body[1]
+      },
+      method: "PUT",
+      body: data
+    });
+    const payload = await response.json();
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 /*=========BUCKET API CALLS==========*/

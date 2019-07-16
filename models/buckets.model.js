@@ -5,13 +5,11 @@ const bucketSchema = mongoose.Schema({
 
   _id: Schema.Types.ObjectId,
 
-  numOfSortables: Number,
-
   catagory:{ type: String, required: 'can\'t be empty' },
 
   owner:{ type : Schema.Types.ObjectId, ref: 'User' },
 
-  sortables: [{ type : Schema.Types.ObjectId, ref: 'Annotation'}],
+  sortables: [{type: String}],
 
   joinedCatagories: [{ type : Schema.Types.ObjectId, ref: 'Bucket'}]
 

@@ -12,7 +12,7 @@ const defaultState = {
   allUsersInfo: [],
 
   bucketInfo: {},
-  allBucketsInfo: [],
+  allBucketsInfo: {},
 
   annotationInfo: {},
   allAnnotationsInfo: []

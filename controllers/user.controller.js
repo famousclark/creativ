@@ -179,7 +179,7 @@ exports.signInUser = (req, res, next) => {
 
     const token = jwt.sign( { id: user._id }, config.secret, {algorithm:'HS384', expiresIn: '15m' } );
 
-    res.status(200).send({ auth: true, authToExpire: false, accessToken: token });
+    return res.status(200).send({ auth: true, authToExpire: false, accessToken: token });
   });
 };
 
