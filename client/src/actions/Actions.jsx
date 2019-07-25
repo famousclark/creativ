@@ -9,6 +9,7 @@ import {
   USER_SIGN_IN,
   USER_SIGN_OUT,
   USER_AUTHORIZE_FLOW,
+  USER_TO_REAUTHORIZE,
 
   RENAME_BUCKET,
   LEFT_MERGE_BUCKETS,
@@ -78,6 +79,12 @@ export const signOutUser = (): Object => {
 export const authorizeFlow = (): Object => {
   return {
     type: USER_AUTHORIZE_FLOW,
+  };
+};
+
+export const reauthorize = (): Object => {
+  return {
+    type: USER_TO_REAUTHORIZE,
   };
 };
 

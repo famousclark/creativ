@@ -46,7 +46,7 @@ export const backGroundWait = async (expiration) => {
 export const decode = async (body) => {
   try{
     const data = await JSON.stringify(body);
-    console.log(data);
+    //console.log(data);
     const response = await fetch(AUTHORIZE_EX_ENDPOINT, {
       headers: {
         'x-access-token': body
@@ -65,7 +65,9 @@ export const decode = async (body) => {
 
 export const signInUser = async (body) => {
   try {
+    //console.log(body);
     const data = await JSON.stringify(body);
+    //console.log(data);
     const response = await fetch(SIGN_IN_USER_ENDPOINT , {
       headers: {
         'Content-Type': 'application/json'
@@ -82,9 +84,9 @@ export const signInUser = async (body) => {
 
 export const registerUser = async (body) => {
   try {
-    console.log(body);
+    //console.log(body);
     const data = await JSON.stringify(body);
-    console.log(data);
+    //console.log(data);
     const response = await fetch(REGISTER_USER_ENDPOINT , {
       headers: {
         'Content-Type': 'application/json'
@@ -92,9 +94,9 @@ export const registerUser = async (body) => {
       method: "POST",
       body: data
     });
-    console.log(response);
+    //console.log(response);
     const payload = await response.json();
-    console.log(payload);
+    //console.log(payload);
     return payload;
   } catch (e) {
     console.log(e);
@@ -154,17 +156,20 @@ export const getAllBuckets = async (body) => {
 }
 
 export const updateBucket = async (body) => {
-  console.log(body);
+  //console.log(body[0]);
   try {
     const data = await JSON.stringify(body[0]);
+    //console.log(data);
     const response = await fetch(UPDATE_BUCKET_ON_CHANGE_ENDPOINT , {
       headers: {
+        'Content-Type': 'application/json',
         'x-access-token': body[1]
       },
       method: "PUT",
       body: data
     });
     const payload = await response.json();
+    //console.log(payload);
     return payload;
   } catch (e) {
     console.log(e);

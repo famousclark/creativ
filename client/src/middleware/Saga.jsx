@@ -35,7 +35,7 @@ function getAuthToken() {
 }
 
 function decodeAuthToken(token){
-  console.log(token);
+  //console.log(token);
   return Api.decode(token);
 }
 
@@ -66,7 +66,7 @@ function* getUserProfileSaga(): Generator<any, any, any> {
 }
 
 function* getAllUsersSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const loaded = yield backend.getAllUsers(userAction.userData, userAction.token);
     //console.log(loaded);
@@ -80,19 +80,19 @@ function* getAllUsersSaga(userAction: Object): Generator<any, any, any> {
 }
 
 function* updateUserSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const updated = yield backend.updateUser(userAction.userData, userAction.token);
     //console.log(loaded);
     yield put({ type: ActionConstants.USER_UPDATED, info: updated });
     //yield sleep(5000);
   } catch (e) {
-    console.log("error");
+    console.log(e);
   }
 }
 
 function* deleteUserSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const added = yield backend.deleteUser(userAction.userData, userAction.token);
 
@@ -110,7 +110,7 @@ function* registerUserSaga(userAction: Object): Generator<any, any, any> {
       userData:
         {email: email, password: password}
     };
-    console.log(userAction);
+    //console.log(userAction);
     const added = yield call(Api.registerUser, userAction.userData);
     yield put({ type: ActionConstants.USER_REGISTERED, info: added });
     yield call(signInUserSaga, signInAction);
@@ -187,7 +187,7 @@ function* authorizeSaga(credentialsOrToken) {
 
   try {
     // call the remote authorization service
-    console.log(credentialsOrToken);
+    //console.log(credentialsOrToken);
     const {toResponse} = yield race({
       toResponse: call(authService, credentialsOrToken),
       toSignout : take(ActionConstants.USER_SIGN_OUT)
@@ -195,7 +195,7 @@ function* authorizeSaga(credentialsOrToken) {
 
     // server responded (with Success) before user signed out
     if(toResponse.auth && toResponse.accessToken) {
-      console.log(toResponse);
+      //console.log(toResponse);
       yield call(setAuthToken, toResponse.accessToken); // save to local storage
       yield put({type: ActionConstants.USER_REAUTHORIZED, info : toResponse});
       return true;
@@ -236,10 +236,10 @@ function* signoutSaga() {
 //****************** Bucket cases *************************
 //*********************************************************
 function* renameBucketSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const updated = yield backend.renameBucket(userAction.userData, userAction.token);
-    console.log(updated);
+    //console.log(updated);
     yield put({ type: ActionConstants.BUCKET_RENAMED, info: updated });
     //yield sleep(5000);
   } catch (e) {
@@ -248,10 +248,10 @@ function* renameBucketSaga(userAction: Object): Generator<any, any, any> {
 }
 
 function* leftMergeBucketsSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const updated = yield backend.leftMergeBuckets(userAction.userData, userAction.token);
-    console.log(updated);
+    //console.log(updated);
     yield put({ type: ActionConstants.BUCKETS_LEFT_MERGED, info: updated });
     //yield sleep(5000);
   } catch (e) {
@@ -260,10 +260,10 @@ function* leftMergeBucketsSaga(userAction: Object): Generator<any, any, any> {
 }
 
 function* rightMergeBucketsSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const updated = yield backend.rightMergeBuckets(userAction.userData, userAction.token);
-    console.log(updated);
+    //console.log(updated);
     yield put({ type: ActionConstants.BUCKETS_RIGHT_MERGED, info: updated });
     //yield sleep(5000);
   } catch (e) {
@@ -272,10 +272,10 @@ function* rightMergeBucketsSaga(userAction: Object): Generator<any, any, any> {
 }
 
 function* addBucketSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const added = yield backend.addBucket(userAction.userData, userAction.token);
-    console.log(added);
+    //console.log(added);
     yield put({ type: ActionConstants.BUCKET_ADDED, info: added });
     //yield sleep(5000);
   } catch (e) {
@@ -284,10 +284,10 @@ function* addBucketSaga(userAction: Object): Generator<any, any, any> {
 }
 
 function* mergeAndCreateNewBucketSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const added = yield backend.mergeAndCreateNewBucket(userAction.userData, userAction.token);
-    console.log(added);
+    //console.log(added);
     yield put({ type: ActionConstants.BUCKETS_MERGED_AND_CREATE_NEW, info: added });
     //yield sleep(5000);
   } catch (e) {
@@ -296,7 +296,7 @@ function* mergeAndCreateNewBucketSaga(userAction: Object): Generator<any, any, a
 }
 
 function* deleteBucketByCatagorySaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const deleted = yield backend.deleteBucketByCatagory(userAction.userData, userAction.token);
     //console.log(loaded);
@@ -308,7 +308,7 @@ function* deleteBucketByCatagorySaga(userAction: Object): Generator<any, any, an
 }
 
 function* getBucketByCatagorySaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const loaded = yield backend.getBucketByCatagory(userAction.userData, userAction.token);
     //console.log(loaded);
@@ -322,25 +322,25 @@ function* getBucketByCatagorySaga(userAction: Object): Generator<any, any, any> 
 }
 
 function* getBucketByAnnotationSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const loaded = yield backend.getBucketByAnnotation(userAction.userData, userAction.token);
     //console.log(loaded);
     yield put({ type: ActionConstants.BUCKET_BY_ANNOTATION_LOADED, info: loaded });
     //yield sleep(5000);
   } catch (e) {
-    console.log("error");
+    console.log(e);
   }
 }
 
 function* getAllBucketsSaga(): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const token = yield call(getAuthToken);
     const loaded = yield call(Api.getAllBuckets, token);
-    console.log(loaded);
+    //console.log(loaded);
     const loadedObj = yield call(arrayToObject, loaded.buckets);
-    console.log(loadedObj);
+    //console.log(loadedObj);
     yield put({ type: ActionConstants.ALL_BUCKETS_LOADED, info: loadedObj });
     //yield sleep(5000);
   } catch (e) {
@@ -353,7 +353,7 @@ function* getAllBucketsSaga(): Generator<any, any, any> {
 //*********************************************************
 
 function* deleteAnnotationByCatagorySaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const deleted = yield backend.deleteAnnotationByCatagory(userAction.userData, userAction.token);
     //console.log(loaded);
@@ -367,7 +367,7 @@ function* deleteAnnotationByCatagorySaga(userAction: Object): Generator<any, any
 }
 
 function* addAnnotationByCatagorySaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const token = yield call(getAuthToken);
     const updated = yield call(Api.updateBucket, [userAction.userData, token]);
@@ -380,14 +380,14 @@ function* addAnnotationByCatagorySaga(userAction: Object): Generator<any, any, a
 }
 
 function* getAllAnnotationsByBucketSaga(userAction: Object): Generator<any, any, any> {
-  console.log("this fired");
+  //console.log("this fired");
   try {
     const loaded = yield backend.getAllAnnotationsByBucket(userAction.token);
     //console.log(loaded);
     yield put({ type: ActionConstants.ALL_ANNOTATIONS_BY_BUCKET_LOADED, info: loaded });
     //yield sleep(5000);
   } catch (e) {
-    console.log("error");
+    console.log(e);
   }
 }
 

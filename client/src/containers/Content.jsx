@@ -7,6 +7,10 @@ import { bindActionCreators } from "redux";
 
 import * as ActionCreators from '../actions/Actions';
 
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -59,6 +63,12 @@ const useStyles = theme => ({
   },
   sortableMargin: {
     marginBottom: '1rem'
+  },
+  infoSnack: {
+    backgroundColor: theme.palette.primary.main
+  },
+  close: {
+    padding: theme.spacing(0.5),
   }
 });
 
@@ -66,44 +76,46 @@ class Content extends React.Component {
 
   constructor(props : Object) {
     super(props);
-    (this : any).handleAutoSave = this.handleAutoSave.bind(this);
+    (this : any).handleSnackBarClose = this.handleSnackBarClose.bind(this);
     (this : any).handleOnChangeSortable = this.handleOnChangeSortable.bind(this);
-
-
     (this : any).state = {
-      sortables: ["test test test test test test tets test tets test tets tte tst stts sttst", 'test', 'test'],
-      groupOne: [
-        'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry',
-        'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry',
-        'Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry'
+      sortables: [
+        "test test test test test test tets test tets test tets tte tst stts sttst",
+        'test',
+        'test'
       ],
-      groupTwo: ['cherry'],
-      groupThree: ['apple'],
-      groupFour: ['apple'],
-      groupFive: ['apple'],
-      groupSix: ['apple'],
-      groupSeven: ['apple'],
-      groupEight: ['apple'],
-      groupNine: ['apple'],
-
       allBuckets: {},
-      toAutoSave: []
+      toAutoSave: [],
+      open: false,
+      setOpen: false
     };
   }
 
   componentDidMount = () => {
-    console.log(this.props);
+    //console.log(this.props);
     const allBucketsProps = this.props.allBucketsInfo;
+    const snack = this.props.userInfo.authToExpire;
+    if (snack) {
+      console.log(`authToExpire is: [${snack}]`);
+      this.setState({setOpen: snack});
+    }
     this.setState({allBuckets: allBucketsProps}, () => console.log(this.state));
 
   }
 
-  handleAutoSave = async () => {
-    await this.props.autoSaveUserContent(this.state.toAutoSave);
+  handleSnackBarClose(reason) {
+    console.log(reason);
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    console.log("reason was not click away");
+    this.setState({setOpen: false});
+    this.props.reauthorize();
   }
 
-  handleOnChangeSortable = (sortableItem) => {
-    this.props.addAnnotationByCatagory(sortableItem);
+  handleOnChangeSortable = (sortableItem, sortableCatagory) => {
+    this.props.addAnnotationByCatagory({sortables : sortableItem, catagory : sortableCatagory});
     /*
     let currentState = this.state.toAutoSave;
 
@@ -125,7 +137,7 @@ class Content extends React.Component {
   render() {
 
     const entries = Object.entries(this.state.allBuckets);
-    console.log(entries);
+    //console.log(entries);
     const sortables = this.state.sortables.map(val => (<ListItem key={uniqueId()} data-id={val}>{val}</ListItem>));
 
     const {classes} = this.props
@@ -144,7 +156,7 @@ class Content extends React.Component {
           onChange={ (items, sortable, evt) => {
             //console.log(`${obj[1].catagory}: [${items}]`);
             //const catagory = obj[1]._id;
-            this.handleOnChangeSortable(items);
+            this.handleOnChangeSortable(items, obj[1].catagory);
             /*
             this.setState(prevState => ({
               //console.log(catagory);
@@ -187,6 +199,36 @@ class Content extends React.Component {
         <Grid className={classes.listRoot} item xs={12} md={8} lg={9}>
           {list}
         </Grid>
+
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.setOpen}
+          onClose={() => this.handleSnackBarClose()}
+          ContentProps={{ 'aria-describedby': 'message-id' }}
+          message={<span id="message-id">Signed out in 5 mins</span>}
+          action={[
+            <Button
+              key="continue"
+              color="secondary"
+              size="small"
+              onClick={() => this.handleSnackBarClose()}
+              type="button">
+              Continue?
+            </Button>,
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={() => this.handleSnackBarClose()}
+              type="button">
+              <CloseIcon />
+            </IconButton>,
+          ]}
+        />
       </Grid>
     );
   }
