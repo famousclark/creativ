@@ -34,7 +34,7 @@
     "jsonwebtoken": "^8.5.1",
     "md5": "latest",
     "mime": "latest",
-    "mongoose": "^5.5.1",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "multer": "latest",
     "mysql": "latest",
